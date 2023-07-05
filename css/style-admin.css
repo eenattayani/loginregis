@@ -1,0 +1,413 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --bg-color: #f1f5f9;
+  --second-bg-color: #c1c4c8;
+  --main-color: #1c2434;
+  --text-color: #64748b;
+  --th-bg-color: #1ddcd1;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--main-color);
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-height: 80px;
+  background: #fff;
+}
+
+header .logo {
+  flex: 20%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  background: var(--second-bg-color);
+  /* padding-right: 10px;
+  padding-left: 10px; */
+  flex-wrap: wrap;
+}
+
+header .logo a {
+  display: flex;
+  align-items: flex-end;
+}
+
+header .logo a img {
+  height: 80px;
+}
+
+header .admin-side {
+  flex: 80%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 50px;
+}
+
+header .admin-side .admin {
+  margin-right: 12px;
+  text-align: right;
+}
+
+header .admin-side .admin h3 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #212b36;
+}
+
+header .admin-side .admin p {
+  font-size: 12px;
+  font-weight: 400;
+  color: #637381;
+}
+
+header .admin-side img {
+  width: 46px;
+  height: 46px;
+}
+
+hr {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.68);
+  box-shadow: 8px 6px 23px 0px #000;
+}
+
+.content {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-wrap: no-wrap;
+  flex-direction: row;
+}
+
+.content .sidebar {
+  flex: 20%;
+  background: var(--second-bg-color);
+  text-align: center;
+  padding-top: 50px;
+  height: 100vh;
+}
+
+.content .sidebar ul li button {
+  width: 150px;
+  padding: 10px 10px;
+  border-radius: 11px;
+  background: #333a48;
+  color: #fff;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.content .sidebar ul li button:hover {
+  opacity: 0.8;
+}
+
+.content .sidebar ul li button.active {
+  color: #807d7e;
+}
+
+.content .sidebar ul li button.btn-logout {
+  margin-top: 60px;
+}
+
+.content .main {
+  flex: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content .main .modal {
+  width: 870px;
+  height: 560px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 2px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 8px 13px -3px rgba(0, 0, 0, 0.07);
+}
+
+.content .main h2 {
+  width: 870px;
+  text-align: left;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--main-color);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.content .main .modal .cover {
+  position: relative;
+}
+
+.content .main .modal .cover img {
+  width: 870px;
+  height: 200px;
+}
+
+.content .main .modal .cover span {
+  background: #3c50e0;
+  width: 76px;
+  height: 32px;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 400;
+  position: absolute;
+  bottom: 18px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.content .main .modal .cover span:hover {
+  opacity: 0.8;
+}
+
+.content .main .modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content .main .modal .modal-content .profil-img {
+  margin-top: -85px;
+  width: 176px;
+  height: 176px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(7px);
+  border-radius: 176px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content .main .modal .modal-content .profil-img img {
+  width: 160px;
+  height: 160px;
+  border-radius: 160px;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.12);
+}
+
+.content .main .modal .modal-content .profil-img .icon {
+  width: 34px;
+  height: 34px;
+  background: #3c50e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 33px;
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.content .main .modal .modal-content .profil-img .icon:hover {
+  opacity: 0.9;
+}
+
+.content .main .modal .modal-content .profil-img .icon i {
+  font-size: 14px;
+  color: #fff;
+}
+
+.content .main .modal .modal-content h3 {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.content .main .modal .modal-content p {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-color);
+  text-align: center;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.content .main .modal .modal-content h4 {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+/* ============================== */
+/* Halaman admin data-barang.php  */
+/* ============================== */
+.content .main.data .tabel-data {
+  width: 70vw;
+  margin-bottom: 30px;
+}
+
+.content .main.data .tabel-data h1 {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.content .main.data .tabel-data table {
+  width: 100%;
+  text-align: center;
+  background: #fff;
+  border-collapse: collapse;
+}
+
+tr {
+  transition: 0.3s;
+}
+
+tr:hover {
+  background: var(--th-bg-color);
+  cursor: pointer;
+}
+
+th {
+  background: var(--th-bg-color);
+}
+
+th:hover {
+  cursor: default;
+}
+
+.content .main.data .form-input {
+  width: 70vw;
+  background: #fff;
+  border: 1px solid #1ddcd1;
+  border-radius: 9px;
+  box-shadow: 8px 10px 18px -3px rgba(0, 0, 0, 0.63);
+  padding: 20px;
+}
+
+.content .main.data .form-input .part-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  column-gap: 50px;
+  margin-bottom: 50px;
+}
+
+.content .main.data .form-input .part-input .left,
+.content .main.data .form-input .part-input .right {
+  flex: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content .main.data .form-input .part-input input {
+  background: #eee;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  margin-left: 20px;
+  padding: 5px 10px 5px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.content .main.data .form-input .part-action {
+  /* background: #eee; */
+  position: relative;
+}
+
+.content .main.data button {
+  width: 90px;
+  padding: 10px 10px;
+  border-radius: 7px;
+  background: #1ddcd1;
+  border: 1px solid #1ddcd1;
+  color: #333;
+  margin-top: 15px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.content .main.data button.keluar {
+  position: absolute;
+  width: 115px;
+  right: 0;
+  margin-right: 0;
+}
+
+.content .main.data button:hover {
+  background: #fff;
+  font-weight: bold;
+  border: 1px solid #333;
+}
+
+/* =============================== */
+/* Halaman admin data-laporan.php  */
+/* =============================== */
+.content .main.data .tabel-data .ket {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.content .main.data .tabel-data .ket .tanggal {
+  background: var(--th-bg-color);
+  display: flex;
+  width: 185px;
+  height: 45px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7px;
+}
+
+.content .main.data .form-input.persediaan,
+.content .main.data .form-input.penjualan {
+  background: var(--bg-color);
+  border: unset;
+  box-shadow: unset;
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 30px;
+}
+
+.content .main.data .form-input.persediaan .part-action {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.content .main.data .form-input.persediaan .part-action .cetak {
+  position: relative;
+  margin: 0;
+  width: 150px;
+}
+
+.content .main.data .form-input.penjualan .part-action button {
+  width: 150px;
+}
