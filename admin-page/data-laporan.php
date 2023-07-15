@@ -80,7 +80,7 @@
             </div>
 
             <div class="form-input persediaan">
-                <form action="POST">                    
+                <form action="">                    
                     <div class="part-action">
                         <button class="cetak">Cetak</button>
                     </div>
@@ -120,7 +120,7 @@
             </div>
 
             <div class="form-input penjualan">
-                <form action="POST">                    
+                <form action="">                    
                     <div class="part-action">
                         <button>Tanggal</button>
                         <button>Bulan</button>

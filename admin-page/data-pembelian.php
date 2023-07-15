@@ -78,7 +78,7 @@
             </div>
 
             <div class="form-input">
-                <form action="POST">
+                <form action="">
                     <div class="part-input">
                         <div class="left">
                             <label for="fid-pembelian">Id Pembelian</label>

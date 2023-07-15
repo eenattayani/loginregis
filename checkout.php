@@ -1,3 +1,17 @@
+<?php
+if (isset($_POST["beli"])) {
+    
+    $idBarang = $_POST["id-barang"];
+    $jlhProduct = $_POST["product-jlh"];
+    $hargaBarang = $_POST["harga-barang"];
+    
+    $subtotal = $hargaBarang * (int)$jlhProduct;
+    $ongkir = 15000;
+    $total = $subtotal + $ongkir;
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +32,9 @@
         <a href="#" class="logo"><img src="img/logo.png" alt="HB"></a>
 
         <nav class="navbar">
-            <a href="#home" >Home</a>
-            <a href="#kategori">Category</a>
-            <a href="#about" >About</a>
+            <a href="home.php">Home</a>
+            <a href="kategori.php">Category</a>
+            <a href="#">About</a>
         </nav>
         <div class="search-bar">
             <div class="search-icon">
@@ -90,14 +104,14 @@
 
                 <h4>Metode Pengiriman</h4>
                 <div class="info-pengiriman">
-                    <p class="est-tanggal">Akan diterima pada tanggal 12-14 Juli</p>
+                    <p class="est-tanggal">Akan diterima pada tanggal 12-14 Juli 2023</p>
                     <div class="est-biaya">
                         <div>
                             <p class="label-est-biaya">Biaya Pengiriman</p>
                             <p>Regular</p>
                         </div>
                         <div>
-                            <p class="nilai-est-biaya">Rp 25.000</p>
+                            <p class="nilai-est-biaya">Rp <?=$ongkir;?></p>
                         </div>
                     </div>
                 </div>
@@ -105,35 +119,36 @@
             </div>
 
             <div class="sidebar-summary">
-                <h2>Order Summary</h2>
-                <div class="products">
-                    <div class="produk-1">
-                        <img src="img/home/garnier.png" alt="">
-                        <p>Garnier Men Oil Control</p>
-                        <p>Rp 29.000</p>
+                <form action="pembayaran.php" method="POST">
+                    <h2>Order Summary</h2>
+                    <div class="products">
+                        <div class="produk-1">
+                            <img src="admin-page/produk_upload/<?=$idBarang;?>.png" alt="">
+                            <p><?="$idBarang x $jlhProduct";?> </p>
+                            <p>Rp <?=$hargaBarang;?></p>
+                        </div>                    
                     </div>
-                    <div class="produk-2">
-                        <img src="img/produk/Rectangle 25kalkulator.png" alt="">
-                        <p>Kalkulator Deli 1654c</p>
-                        <p>Rp 29.000</p>
+    
+                    <div class="subtotal">
+                        <span>Subtotal <span class="produk-item">(<?=$jlhProduct;?> items)</span></span>
+                        <span>Rp <?=$subtotal?></span>
                     </div>
-                </div>
-
-                <div class="subtotal">
-                    <span>Subtotal <span class="produk-item">(2 items)</span></span>
-                    <span>Rp 195.000</span>
-                </div>
-                <div class="biaya-kirim">
-                    <span>Biaya Pengiriman</span>
-                    <span>Rp 25.000</span>
-                </div>
-                <div class="total">
-                    <span>Total</span>
-                    <span>Rp 220.000</span>
-                </div>
-                <div class="btn-checkout">
-                    <button>Pembayaran</button>
-                </div>
+                    <div class="biaya-kirim">
+                        <span>Biaya Pengiriman</span>
+                        <span>Rp <?=$ongkir;?></span>
+                    </div>
+                    <div class="total">
+                        <span>Total</span>
+                        <span>Rp <?=$total;?></span>
+                    </div>
+                    <div class="btn-checkout">
+                        <input type="hidden" name="product-jlh" value="<?=$jlhProduct;?>">
+                        <input type="hidden" name="ongkir" value="<?=$ongkir;?>">
+                        <input type="hidden" name="subtotal" value="<?=$subtotal;?>">
+                        <input type="hidden" name="total" value="<?=$total;?>">
+                        <button type="submit" name="bayar" id="bayar">Pembayaran</button>
+                    </div>
+                </form>
             </div>
         </div>
         
@@ -145,3 +160,9 @@
     
 </body>
 </html>
+
+<?php
+} else {
+    header("location:kategori.php");
+}
+?>

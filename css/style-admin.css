@@ -89,7 +89,7 @@ hr {
 
 .content {
   width: 100%;
-  height: 100vh;
+  height: 150vh;
   display: flex;
   flex-wrap: no-wrap;
   flex-direction: row;
@@ -100,7 +100,7 @@ hr {
   background: var(--second-bg-color);
   text-align: center;
   padding-top: 50px;
-  height: 100vh;
+  height: 150vh;
 }
 
 .content .sidebar ul li button {
@@ -130,7 +130,7 @@ hr {
   flex: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -261,7 +261,21 @@ hr {
 /* ============================== */
 .content .main.data .tabel-data {
   width: 70vw;
+  margin-top: 30px;
   margin-bottom: 30px;
+  max-height: 40vh;
+  overflow: scroll;
+}
+
+/* Sembunyikan scrollbar dari Chrome, Safari dan Opera */
+.content .main.data .tabel-data::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sembunyikan scrollbar untuk IE, Edge dan Firefox */
+.content .main.data .tabel-data {
+  -ms-overflow-style: none; /* IE dan Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .content .main.data .tabel-data h1 {
@@ -319,7 +333,16 @@ th:hover {
   flex-direction: column;
 }
 
-.content .main.data .form-input .part-input input {
+.content .main.data .form-input .part-input .left #img {
+  width: 150px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 2px 2px 23px 0px rgba(0, 0, 0, 0.5);
+  margin-left: 20px;
+}
+
+.content .main.data .form-input .part-input input,
+.content .main.data .form-input .part-input select {
   background: #eee;
   margin-top: 5px;
   margin-bottom: 15px;
@@ -360,6 +383,18 @@ th:hover {
   background: #fff;
   font-weight: bold;
   border: 1px solid #333;
+}
+
+.content .main.data button.disabled {
+  background: #34f5eb;
+  color: #18ada6;
+  cursor: default;
+}
+
+.content .main.data button.disabled:hover {
+  background: #34f5eb;
+  font-weight: unset;
+  border: 1px solid #34f5eb;
 }
 
 /* =============================== */

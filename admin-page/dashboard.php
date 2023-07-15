@@ -7,10 +7,16 @@
     <link rel="shortcut icon" href="img/logo-hb.png" type="image/x-icon">
     <title>HB Admin - Dashboard</title>
 
-    <link rel="stylesheet" href="../css/style-admin.css">
+    <!-- <link rel="stylesheet" href="../css/style-admin.css"> -->
     
     <!-- box icons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+    <style>
+        <?php
+            require "../css/style-admin.css";
+        ?>
+    </style>
 </head>
 <body>
     <header>

@@ -5,7 +5,7 @@
     $database = 'dbhokibeauty'; 
 
     // $servername = 'localhost'; 
-    // $username = 'root'; 
+    // $username = 'u420165457_root'; 
     // $password = '>:zkpzavG8'; 
     // $database = 'u420165457_dbhokibeauty'; 
 

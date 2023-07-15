@@ -1,3 +1,13 @@
+<?php
+if (isset($_POST["bayar"])) {
+    
+    $jlhProduct = $_POST["product-jlh"];
+    $subtotal = $_POST["subtotal"];
+    $ongkir = $_POST["ongkir"];    
+    $total = $_POST["total"];    
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +28,9 @@
         <a href="#" class="logo"><img src="img/logo.png" alt="HB"></a>
 
         <nav class="navbar">
-            <a href="#home" >Home</a>
-            <a href="#kategori">Category</a>
-            <a href="#about" >About</a>
+            <a href="home.php" >Home</a>
+            <a href="kategori.php">Category</a>
+            <a href="#" >About</a>
         </nav>
         <div class="search-bar">
             <div class="search-icon">
@@ -53,16 +63,16 @@
                 <h2>Detail Pembayaran</h2>       
                 
                 <div class="subtotal">
-                    <span>Subtotal <span class="produk-item">(2 items)</span></span>
-                    <span>Rp 195.000</span>
+                    <span>Subtotal <span class="produk-item">(<?=$jlhProduct;?> items)</span></span>
+                    <span>Rp <?=$subtotal;?></span>
                 </div>
                 <div class="biaya-kirim">
                     <span>Biaya Pengiriman</span>
-                    <span>Rp 25.000</span>
+                    <span>Rp <?=$ongkir;?></span>
                 </div>
                 <div class="total">
                     <span>Total</span>
-                    <span>Rp 220.000</span>
+                    <span>Rp <?=$total;?></span>
                 </div>
 
                 <div class="bukti-transfer">
@@ -84,3 +94,9 @@
     
 </body>
 </html>
+
+<?php
+} else {
+    header("location:kategori.php");
+}
+?>

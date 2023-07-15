@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Abel&family=Aclonica&family=M+PLUS+Rounded+1c:wght@500;700&family=Montserrat:wght@300;400;500;600;700;800&family=Oswald:wght@200;300;400;500;600;700&family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,700&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800&family=Roboto:ital,wght@0,100;0,300;0,500;0,700;1,100;1,300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
 * {
   margin: 0;
@@ -172,7 +172,8 @@ header {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  font-family: "Abel", sans-serif;
+  /* font-family: "Abel", sans-serif; */
+  font-family: "Poppins", sans-serif;
   border-bottom: 1px solid #bebcbd;
 }
 
@@ -280,7 +281,8 @@ section .sidebar {
   flex: 25%;
   background: #fff;
   padding: 0 20px 0 60px;
-  font-family: "Abel", sans-serif;
+  /* font-family: "Abel", sans-serif; */
+  font-family: "Poppins", sans-serif;
 }
 
 section .sidebar-title {
@@ -334,11 +336,10 @@ section .sidebar .sidebar-content ul li:hover {
 }
 
 section .main-content {
-  /* flex-grow: 8; */
   flex: 75%;
-  /* background: rgb(194, 143, 143); */
   padding: 0 20px 0 30px;
-  font-family: "Abel", sans-serif;
+  /* font-family: "Abel", sans-serif; */
+  font-family: "Poppins", sans-serif;
 }
 
 section .main-content .main-content-text {
@@ -354,13 +355,11 @@ section .main-content .main-content-text {
 section .main-content .main-content-text .text-right span {
   margin-right: 25px;
   cursor: pointer;
-  /* transition: 0.3s; */
+  transition: 0.2s;
 }
 
 section .main-content .main-content-text .text-right span:hover {
   color: #8a33fd;
-  /* text-shadow: 1px 1px 1px #8a33fd; */
-  font-weight: bold;
 }
 
 section .main-content .main-content-text .text-right span.active {
@@ -389,6 +388,14 @@ section .main-content .main-content-products .product-box .img {
   border: 1px solid #000;
   border-radius: 12px;
   transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section .main-content .main-content-products .product-box .img img {
+  max-width: 282px;
+  max-height: 370px;
 }
 
 section .main-content .main-content-products .product-box .img:hover {
@@ -449,7 +456,7 @@ footer {
   position: static;
   width: 100%;
   height: 50px;
-  font-family: "Abel", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* ============================= */
@@ -791,7 +798,8 @@ section.content-detail-product {
   margin-top: 76px;
   background: #fff;
   position: relative;
-  font-family: "Roboto Slab", serif;
+  /* font-family: "Roboto Slab", serif; */
+  font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: row;
   padding: 30px 60px;
@@ -808,7 +816,8 @@ section.content-detail-product {
 
 .content-detail-product .product-desc .product-link p {
   display: inline-block;
-  font-family: "Roboto", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Poppins", sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #828282;
@@ -818,7 +827,8 @@ section.content-detail-product {
 }
 
 .content-detail-product .product-desc .product-name h2 {
-  font-family: "Oswald", sans-serif;
+  /* font-family: "Oswald", sans-serif; */
+  font-family: "Poppins", sans-serif;
   font-size: 48px;
   font-weight: 500;
   color: #000;
@@ -826,14 +836,14 @@ section.content-detail-product {
 }
 
 .content-detail-product .product-desc .product-price h4 {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 28px;
   color: #3c4242;
   margin-bottom: 15px;
 }
 
 .content-detail-product .product-desc .product-description h4 {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 28px;
   color: #3c4242;
   margin-bottom: 15px;
@@ -843,7 +853,7 @@ section.content-detail-product {
   margin: 0;
   padding: 0;
   text-align: left;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
   line-height: 25px;
   font-weight: 600;
@@ -855,10 +865,16 @@ section.content-detail-product {
   margin-left: 50px;
 }
 
+.content-detail-product .product-desc .product-action form {
+  width: unset;
+  margin: unset;
+  padding: unset;
+}
+
 .content-detail-product .product-desc .product-action .input {
   display: flex;
   flex-direction: row;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 14px;
   font-weight: bold;
   color: #3c4242;
@@ -870,7 +886,8 @@ section.content-detail-product {
 }
 
 .content-detail-product .product-desc .product-action .input input {
-  font-family: "Oswald", sans-serif;
+  /* font-family: "Oswald", sans-serif; */
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
   font-weight: 400;
   border-radius: 0;
@@ -881,7 +898,6 @@ section.content-detail-product {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background: #01a507; */
 }
 
 .content-detail-product .product-desc .product-action .input label {
@@ -917,6 +933,7 @@ section.content-detail-product {
 
 .content-detail-product .product-desc .product-action .input .box-subtotal {
   background: #fff;
+  width: 200px;
 }
 
 .content-detail-product .product-desc .product-action .input input#subtotal {
@@ -927,7 +944,8 @@ section.content-detail-product {
 }
 
 .content-detail-product .product-desc .product-action .action {
-  font-family: "Oswald", sans-serif;
+  /* font-family: "Oswald", sans-serif; */
+  font-family: "Poppins", sans-serif;
   text-transform: uppercase;
 }
 
@@ -937,7 +955,8 @@ section.content-detail-product {
   border-radius: 0;
   background: black;
   color: #fff;
-  font-family: "Oswald", sans-serif;
+  /* font-family: "Oswald", sans-serif; */
+  font-family: "Poppins", sans-serif;
   text-transform: uppercase;
   font-size: 14px;
 }
@@ -949,7 +968,8 @@ section.content-detail-product {
 }
 
 .footer-detail-product {
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: "Poppins", sans-serif;
   font-size: 18px;
   color: #00000080;
   font-weight: 600;
@@ -993,7 +1013,7 @@ section.content-pembayaran {
   margin-top: 76px;
   background: #fff;
   position: relative;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
   font-weight: 600;
   color: #3c4242;
   display: flex;
@@ -1057,6 +1077,7 @@ section.content-pembayaran {
   padding: 14px 20px;
   margin-left: 0;
   border: none;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
 }
 
 .content-checkout .checkout-detail .data-pelanggan .nama,
@@ -1097,7 +1118,7 @@ section.content-pembayaran {
   background: #f6f6f6;
   border-radius: 12px;
   margin-top: 20px;
-  padding: 0 0 20px 0;
+  padding: 0 0 20px 10px;
 }
 
 .content-checkout .checkout-detail .info-pengiriman .est-tanggal {
@@ -1143,6 +1164,12 @@ section.content-pembayaran {
   padding: 14px;
   box-shadow: 1px 1px 4px #3f464680;
   text-align: left;
+}
+
+.content-checkout .sidebar-summary form {
+  margin: unset;
+  padding: unset;
+  width: 100%;
 }
 
 .content-checkout .sidebar-summary h2 {
@@ -1232,6 +1259,7 @@ section.content-pembayaran {
   color: #fff;
   border-radius: 8px;
   padding: 12px 20px;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
 }
 
 .body-checkout footer {
@@ -1330,8 +1358,10 @@ section.content-pembayaran {
   background: #8a33fd;
   border-radius: 8px;
   font-size: 12px;
-  font-weight: 900;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+  font-weight: 500;
   padding-top: 6px;
+  letter-spacing: 1px;
   width: 120px;
   height: 29px;
   margin-top: 0;
@@ -1355,10 +1385,209 @@ section.content-pembayaran {
   color: #fff;
   background: #8a33fd;
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 600;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
   border-radius: 8px;
   padding: 12px 10px;
   width: 100px;
+}
+
+/* ================================= */
+/* Halaman Kategori admin-login.php  */
+/* ================================= */
+.container.login-admin {
+  font-family: "Poppins", sans-serif;
+}
+
+.container.login-admin .login .form {
+  font-family: "Poppins", sans-serif;
+  background: #2196f3;
+}
+
+.container.login-admin .login .form button {
+  font-family: "Poppins", sans-serif;
+  background: #2196f3;
+}
+
+/* =============================== */
+/* Halaman Kategori wishlist.php   */
+/* =============================== */
+
+body.body-wishlist {
+  display: block;
+  height: 100%;
+  text-align: center;
+}
+
+section.content-wishlist {
+  width: 100%;
+  height: 100vh;
+  margin-top: 76px;
+  background: #fff;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #3c4242;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 60px;
+}
+
+.content-wishlist .content-main {
+  margin-top: 30px;
+  display: flex;
+  background: #17d8c5;
+  width: 100%;
+}
+
+.content-wishlist .content-main .sidebar-summary {
+  flex: 30%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.content-wishlist .content-main .sidebar-summary h2 {
+  position: relative;
+  padding: 0 20px;
+  margin-left: 5px;
+  margin-bottom: 50px;
+  color: #3c4242;
+  text-transform: none;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.content-wishlist .content-main .sidebar-summary h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  background: #8a33fd;
+  width: 6px;
+  height: 90%;
+  border-radius: 10px;
+}
+
+.content-wishlist .content-main .sidebar-summary ul {
+  text-align: left;
+  background: #2fa2c4;
+  width: 100%;
+}
+
+.content-wishlist .content-main .sidebar-summary ul li {
+  position: relative;
+  list-style: none;
+  background: #fff;
+  color: #807d7e;
+  padding: 8px 0 8px 30px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.content-wishlist .content-main .sidebar-summary ul li.active {
+  background: #f6f6f6;
+}
+
+.content-wishlist .content-main .sidebar-summary ul li.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  background: #3c4242;
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  margin-top: -8px;
+}
+
+.content-wishlist .content-main .sidebar-summary ul li:hover {
+  background: #f6f6f6;
+}
+
+.content-wishlist .content-main .sidebar-summary ul li a {
+  text-decoration: none;
+  margin-left: 10px;
+  color: #807d7e;
+}
+
+.content-wishlist .content-main .wishlist-detail {
+  flex: 70%;
+  background: #fff;
+  text-align: left;
+}
+
+.content-wishlist .content-main .wishlist-detail h2 {
+  margin-bottom: 50px;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background: #fff;
+  margin-bottom: 20px;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .img-nama {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .nama-qty {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .nama-qty .qty {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.content-wishlist .content-main .wishlist-detail .list-wishlist .nama-qty .box-qty {
+  margin-left: 10px;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .nama-qty .box-qty input {
+  height: 25px;
+  width: 45px;
+  border: none;
+  text-align: center;
+  background: #eee;
+  margin: 0 -4px;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .nama-qty .box-qty button {
+  width: 25px;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+  background: 8a33fd;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .img {
+  width: 70px;
+  height: 70px;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .img img {
+  max-width: 70px;
+  max-height: 70px;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .btn-checkout button {
+  width: 133px;
+  background: #8a33fd;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  margin: 0;
 }
 
 @media (max-width: 880px) {

@@ -1,3 +1,23 @@
+<?php
+session_start();
+
+include "dbconn.php";
+
+$link_wishlist = "login.php?ke=home.php";
+$link_account = "login.php?ke=home.php";
+$link_cart = "login.php?ke=home.php";
+
+if (isset($_SESSION["login"])) {
+    
+    if ( $_SESSION["login"] === true ) {
+        $link_wishlist = "wishlist.php";
+        $link_account = "wishlist.php";
+        $link_cart = "wishlist.php";
+    }
+}
+    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +34,12 @@
 </head>
 <body class="body-home">
     <header>        
-        <a href="#" class="logo"><img src="img/logo.png" alt="HB"></a>
+        <a href="home.php" class="logo"><img src="img/logo.png" alt="HB"></a>
 
         <nav class="navbar">
-            <a href="#home" class="active">Home</a>
-            <a href="#kategori">Category</a>
-            <a href="#about" >About</a>
+            <a href="home.php" class="active">Home</a>
+            <a href="kategori.php">Category</a>
+            <a href="#" >About</a>
         </nav>
         <div class="search-bar">
             <div class="search-icon">
@@ -30,9 +50,9 @@
             </div>
         </div>
         <div class="icon-bar">
-            <button><i class='bx bx-heart' ></i></button>
-            <button><i class='bx bx-user' ></i></button>
-            <button><i class='bx bx-cart'></i></button>
+            <a href="<?=$link_wishlist;?>"><button><i class='bx bx-heart' ></i></button></a>
+            <a href="<?=$link_account;?>"><button><i class='bx bx-user' ></i></button></a>
+            <a href="<?=$link_cart;?>"><button><i class='bx bx-cart'></i></button></a>
         </div>
     </header>
 
@@ -42,7 +62,7 @@
             <h3 class="headline">Kecantikan</h3>
             <h1 class="tag">Special</h1>
             <h1 class="tag">Price</h1>
-            <button class="banner-btn">Shop Now</button>
+            <a href="kategori.php"><button class="banner-btn">Shop Now</button></a>
         </div>
         <div class="banner-arrow">
             <i class='bx bx-chevron-left' ></i>
@@ -59,7 +79,7 @@
             <div class="col-text">
                 <h2>Special Promo</h2>
                 <h3> UPTO 30% OFF</h3>
-                <a href="#"> Explore Items</a>
+                <a href="kategori.php"> Explore Items</a>
             </div>
             <div class="col-img">
                 <img src="img/home/garnier.png" alt="">

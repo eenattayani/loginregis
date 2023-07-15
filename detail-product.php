@@ -1,4 +1,34 @@
 <?php
+$namaBarang ="Barangnya";
+
+if(isset($_GET["id"])){
+    $id = $_GET["id"];
+    
+    
+    include "dbconn.php";
+    $query = "SELECT * FROM tbbarang WHERE id_barang='$id'";
+    $result = mysqli_query($connection, $query);
+
+    $data = mysqli_fetch_assoc($result);
+
+    $idBarang = $data["id_barang"];
+    $namaBarang = $data["nama_barang"];
+    $hargaBarang = $data["harga_barang"];
+
+    
+    if (!$result) {
+        echo "Query gagal: ".mysqli_error($connection);    
+    }
+
+    
+    mysqli_close($connection);
+} else {
+    header("location:kategori.php");
+}
+
+$link_wishlist = "login.php?ke=detail-product.php?id=$id";
+$link_account = "login.php?ke=detail-product.php?id=$id";
+$link_cart = "login.php?ke=detail-product.php?id=$id";
 
 ?>
 
@@ -22,9 +52,9 @@
         <a href="#" class="logo"><img src="img/logo.png" alt="HB"></a>
 
         <nav class="navbar">
-            <a href="#home" >Home</a>
-            <a href="#kategori">Category</a>
-            <a href="#about" >About</a>
+            <a href="home.php" >Home</a>
+            <a href="kategori.php">Category</a>
+            <a href="#">About</a>
         </nav>
         <div class="search-bar">
             <div class="search-icon">
@@ -35,15 +65,15 @@
             </div>
         </div>
         <div class="icon-bar">
-            <button><i class='bx bx-heart' ></i></button>
-            <button><i class='bx bx-user' ></i></button>
-            <button><i class='bx bx-cart'></i></button>
+            <a href="<?=$link_wishlist;?>"><button><i class='bx bx-heart' ></i></button></a>
+            <a href="<?=$link_account;?>"><button><i class='bx bx-user' ></i></button></a>
+            <a href="<?=$link_cart;?>"><button><i class='bx bx-cart'></i></button></a>
         </div>
     </header>
 
     <section class="content-detail-product">
         <div class="product-img">
-            <img src="img/produk/clear-detail.png" alt="">
+            <img src="admin-page/produk_upload/<?=$idBarang;?>.png" alt="">
         </div>
 
         <div class="product-desc">
@@ -51,33 +81,38 @@
                 <p>Home / Category / Kecantikan</p>
             </div>
             <div class="product-name">
-                <h2>Clear Men Cool Sport Menthol</h2>
+                <h2><?=$namaBarang;?></h2>
             </div>
             <div class="product-price">
-                <h4>Rp 48.000</h4>
+                <h4>Rp <?=$hargaBarang;?></h4>
             </div>
             <div class="product-description">
                 <h4>Deskripsi Produk</h4>
-                <p>Inovasi formula shampo anti ketombe baru berbentuk gel cair yang segar dan cepat meresap. Clear sampo rambut anti dandruff yang diformulasikan khusus untuk pria. Perawatan rambut pria yang efektif menghilangkan, melawan, dan mencegah ketombe. Anti dandruff sampo pria yang 2x lebih lembut di kulit kepala dan rambut. Men shampo yang memberikan sensai dingin pada kulit kepala. Anti dandruff shampo yang cocok untuk jenis rambut apa saja: kering, normal, dan berminyak - BPOM NA18181003196 </p>
+                <p>Produk ini memiliki sangat banyak kegunaan dalam kehidupan sehari-hari manusia untuk menunjang berbagai aktivitas yang beragam di masyarakat. </p>
             </div>
             <div class="product-action">
-                <div class="input">
-                    <div class="box-jlh">
-                        <label for="product-jlh">Banyaknya</label>
-                        <div>
-                            <span>-</span><input type="text" id="product-jlh" value="1">
-                            <span>+</span>
+                <form action="checkout.php" method="post">
+                    <div class="input">
+                        <input type="hidden" name="id-barang" value="<?=$idBarang;?>">
+                        <input type="hidden" name="harga-barang" value="<?=$hargaBarang;?>">
+                        <div class="box-jlh">
+                            <label for="product-jlh">Banyaknya</label>
+                            <div>
+                                <span onclick="kurangSubtotal()">-</span>
+                                <input type="text" name="product-jlh" id="product-jlh" value="1" onchange="ubahSubtotal()">
+                                <span onclick="tambahSubtotal()">+</span>
+                            </div>
+                        </div>
+                        <div class="box-subtotal">
+                            <label for="subtotal">Subtotal</label>                    
+                            <input type="text" name="subtotal" id="subtotal" value="Rp <?=$hargaBarang;?>">
                         </div>
                     </div>
-                    <div class="box-subtotal">
-                        <label for="subtotal">Subtotal</label>
-                        <input type="text" id="subtotal" value="Rp 48.000">
+                    <div class="action">
+                        <button type="submit" name="beli" class="keranjang">+ Keranjang</button>
+                        <button type="submit" name="beli" class="beli">Beli</button>
                     </div>
-                </div>
-                <div class="action">
-                    <button class="keranjang">+ Keranjang</button>
-                    <button class="beli">Beli</button>
-                </div>
+                </form>
             </div>
         </div>
     </section>
@@ -86,5 +121,6 @@
         <p>Copyright &copy 2023</p>
     </footer>
 
+<script src="js/script-product.js"></script>
 </body>
 </html>
