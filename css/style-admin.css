@@ -290,6 +290,7 @@ hr {
   text-align: center;
   background: #fff;
   border-collapse: collapse;
+  font-size: 12px;
 }
 
 tr {
@@ -333,7 +334,7 @@ th:hover {
   flex-direction: column;
 }
 
-.content .main.data .form-input .part-input .left #img {
+.content .main.data .form-input .part-input .right #img {
   width: 150px;
   height: auto;
   border-radius: 4px;
@@ -445,4 +446,20 @@ th:hover {
 
 .content .main.data .form-input.penjualan .part-action button {
   width: 150px;
+}
+
+/* ============================ */
+/* Halaman admin penjualan.php  */
+/* ============================ */
+.content .main.data .form-input .part-input img {
+  width: 100%;
+  max-height: 340px;
+  background: #18ada6;
+}
+
+/* ============================ */
+/* ============================ */
+
+.content .main.data .form-input .part-input input.red {
+  background: rgba(245, 0, 0, 0.808);
 }

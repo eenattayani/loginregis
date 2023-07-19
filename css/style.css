@@ -1046,6 +1046,12 @@ section.content-pembayaran {
   justify-content: space-between;
 }
 
+.content-checkout form {
+  margin: unset;
+  padding: unset;
+  width: 100%;
+}
+
 .content-checkout .checkout-detail {
   flex: 65%;
   text-align: left;
@@ -1070,7 +1076,8 @@ section.content-pembayaran {
   font-size: 16px;
 }
 
-.content-checkout .content-main .checkout-detail .data-pelanggan input {
+.content-checkout .content-main .checkout-detail .data-pelanggan input,
+.content-checkout .content-main .checkout-detail .data-pelanggan select {
   margin-top: 8px;
   background: #f6f6f6;
   border-radius: 8px;
@@ -1164,12 +1171,6 @@ section.content-pembayaran {
   padding: 14px;
   box-shadow: 1px 1px 4px #3f464680;
   text-align: left;
-}
-
-.content-checkout .sidebar-summary form {
-  margin: unset;
-  padding: unset;
-  width: 100%;
 }
 
 .content-checkout .sidebar-summary h2 {
@@ -1280,6 +1281,13 @@ section.content-pembayaran {
   align-items: flex-start;
 }
 
+.content-pembayaran .content-main form {
+  margin: unset;
+  padding: unset;
+  width: 100%;
+  text-align: left;
+}
+
 .content-pembayaran .content-main h1 {
   position: relative;
   padding: 0 10px;
@@ -1339,7 +1347,7 @@ section.content-pembayaran {
   margin: 0;
   margin-top: 30px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .content-pembayaran .content-main .pembayaran-detail .bukti-transfer h3 {
@@ -1350,6 +1358,7 @@ section.content-pembayaran {
   text-transform: none;
   width: max-content;
   margin-top: 0;
+  margin-bottom: 0;
   text-align: left;
 }
 
@@ -1365,6 +1374,13 @@ section.content-pembayaran {
   width: 120px;
   height: 29px;
   margin-top: 0;
+}
+
+.content-pembayaran .content-main .pembayaran-detail .bukti-transfer .input-img {
+  height: 40px;
+  width: 400px;
+  margin-left: 20px;
+  margin-bottom: 10px;
 }
 
 .content-pembayaran .content-main .pembayaran-detail .bukti-transfer div.img-bukti-transfer {
@@ -1384,12 +1400,12 @@ section.content-pembayaran {
 .content-pembayaran .content-main .btn-kirim {
   color: #fff;
   background: #8a33fd;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 400;
   font-family: "Poppins", Arial, Helvetica, sans-serif;
   border-radius: 8px;
   padding: 12px 10px;
-  width: 100px;
+  width: 300px;
 }
 
 /* ================================= */
@@ -1522,6 +1538,12 @@ section.content-wishlist {
   margin-bottom: 50px;
 }
 
+.content-wishlist .content-main .wishlist-detail form {
+  margin: unset;
+  padding: unset;
+  width: 100%;
+}
+
 .content-wishlist .content-main .wishlist-detail .list-wishlist {
   display: flex;
   flex-direction: row;
@@ -1581,13 +1603,53 @@ section.content-wishlist {
   max-height: 70px;
 }
 
-.content-wishlist .content-main .wishlist-detail .list-wishlist .btn-checkout button {
-  width: 133px;
+.content-wishlist .content-main .wishlist-detail .list-wishlist .btn-hapus button {
+  width: 63px;
   background: #8a33fd;
   color: #fff;
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   margin: 0;
+  transition: 0.3s;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist .btn-hapus button:hover {
+  opacity: 0.8;
+}
+
+.content-wishlist .content-main .wishlist-detail .btn-checkout button {
+  width: 183px;
+  background: #8a33fd;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  margin: 0;
+  transition: 0.3s;
+}
+
+.content-wishlist .content-main .wishlist-detail .btn-checkout button:hover {
+  opacity: 0.8;
+}
+
+.content-wishlist .content-main .wishlist-detail .list-wishlist.myorders span.keterangan {
+  font-size: 14px;
+  font-weight: 400;
+  padding-left: 6px;
+}
+
+.content-wishlist .content-main .wishlist-detail .btn-bayar button {
+  width: 183px;
+  background: #8a33fd;
+  color: #fff;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  margin: 0;
+  transition: 0.3s;
+}
+
+.content-wishlist .content-main .wishlist-detail .btn-bayar button:hover {
+  opacity: 0.8;
 }
 
 @media (max-width: 880px) {
@@ -1616,4 +1678,12 @@ section.content-wishlist {
     width: 100%;
     height: 100%;
   }
+}
+
+/* ============================ */
+/* ============================ */
+
+.wishlist-detail .myorders .btn-bayar button.gray {
+  background: #38f0e6;
+  cursor: default;
 }

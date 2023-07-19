@@ -1,3 +1,55 @@
+<?php
+
+include "../dbconn.php";
+
+
+if (isset($_POST["btn"])) {
+    
+    $id = $_POST["fid-penjualan"];
+    $ekspedisi = $_POST["fekspedisi"];
+    $noresi = $_POST["fno-resi"];
+    
+    $status = 'dikirim';
+
+    if ($_POST["btn"] === "simpan") {
+        $queryUbah = "UPDATE tbpenjualan SET ekspedisi = '$ekspedisi', no_resi = '$noresi' WHERE id_penjualan = '$id'";
+        $resultUbah = mysqli_query($connection, $queryUbah);
+       
+    } elseif  ($_POST["btn"] === "konfirmasi") {
+        $queryConfirm = "UPDATE tbpenjualan SET status_penjualan = '$status' WHERE id_penjualan = '$id'";
+        $resultConfirm = mysqli_query($connection, $queryConfirm);     
+
+        $queryConfirm = "UPDATE tbkeranjang SET status_beli = '$status' WHERE id_penjualan = '$id'";
+        $resultConfirm = mysqli_query($connection, $queryConfirm);  
+        
+        if ($resultConfirm) {
+            echo '
+            <script>
+                alert("pembayaran diterima!");
+            </script>
+            ';
+        } else {
+            echo '
+            <script>
+                alert("GAGAL konfirmasi!");
+            </script>
+            ';
+        }
+    }
+
+}
+
+
+$query = "SELECT * FROM tbpenjualan ORDER BY id_penjualan DESC";
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    echo "Query gagal: ".mysqli_error($connection);    
+}
+
+mysqli_close($connection);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,75 +96,229 @@
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
-                <li><button class="btn-logout">Logout</button></li>
+                <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
         </div>
 
         <div class="main data">
             <div class="tabel-data">
                 <h1>Data Penjualan</h1>
-                <table>
+                <table id="myTable">
                     <thead>
                         <tr>                            
+                            <th>Id Penjualan</th>                            
                             <th>Tanggal</th>
-                            <th>No Penjualan</th>                            
                             <th>Id Pelanggan</th>                            
-                            <th>Id Barang</th>                            
-                            <th>Nama Barang</th>                            
-                            <th>Qty</th>                            
-                            <th>Satuan</th>                            
-                            <th>Harga Barang</th>                            
+                            <th>Harga Subtotal</th>                            
+                            <th>Harga Ongkir</th>                            
+                            <th>Harga Total</th>                            
+                            <th>Status Penjualan</th>                            
+                            <th>Ekspedisi</th>                            
+                            <th>No Resi</th>                            
                         </tr>
                     </thead>
                     <tbody>
+                    <?php
+                    if ( $result->num_rows === 0 ) {
+                    ?>
                         <tr>
-                            <td>5-7-2023</td>
-                            <td>PJ001</td>                            
-                            <td>PL001</td>                            
-                            <td>0001</td>                            
-                            <td>Clear Men Sport</td>                            
-                            <td>1</td>                            
-                            <td>Pcs</td>                            
-                            <td>43.000</td>                            
+                            <td colspan="9"> == Belum ada data penjualan == </td>
                         </tr>
+                    <?php
+                    } else {
+                        $r = 1;
+                        while($row = mysqli_fetch_assoc($result)) {                                
+                            echo "
+                            <tr id=\"baris$r\" onclick=\"pilihBaris(". $r .")\">
+                                <td id=\"id$r\">" . $row["id_penjualan"] . "</td>
+                                <td id=\"tanggal$r\">" . $row["tanggal"] . "</td>                                
+                                <td id=\"pelanggan$r\">" . $row["id_pelanggan"] . "</td>                                
+                                <td id=\"subtotal$r\">" . $row["harga_subtotal"] . "</td>                               
+                                <td id=\"ongkir$r\">" . $row["harga_ongkir"] . "</td>                               
+                                <td id=\"total$r\">" . $row["harga_total"] . "</td>                               
+                                <td id=\"status$r\">" . $row["status_penjualan"] . "</td>                               
+                                <td id=\"ekspedisi$r\">" . $row["ekspedisi"] . "</td>                               
+                                <td id=\"noresi$r\">" . $row["no_resi"] . "</td>                               
+                            </tr>
+                            ";
+                            $r++;
+                        }
+                    }
+                    ?>
                     </tbody>
                 </table>
             </div>
 
             <div class="form-input">
-                <form action="">
+                <form action="" method="POST">
                     <div class="part-input">
                         <div class="left">
-                            <label for="fno-penjualan">No Penjualan</label>
-                            <input type="text" name="fno-penjualan" id="fno-penjualan">
+                            <label for="fid-penjualan">Id Penjualan</label>
+                            <input type="text" name="fid-penjualan" id="fid-penjualan">
                             <label for="fid-pelanggan">Id Pelanggan</label>
                             <input type="text" name="fid-pelanggan" id="fid-pelanggan">
-                            <label for="fnama-barang">Nama Barang</label>
-                            <input type="text" name="fnama-barang" id="fnama-barang">
+                            <label for="fharga-subtotal">Harga Subtotal</label>
+                            <input type="text" name="fharga-subtotal" id="fharga-subtotal">
+                            <label for="fharga-ongkir">Harga Ongkir</label>
+                            <input type="text" name="fharga-ongkir" id="fharga-ongkir">
+                            <label for="ftotal-harga">Total Bayar</label>
+                            <input type="text" name="ftotal-harga" id="ftotal-harga">
+                            <label for="fekspedisi">Ekspedisi</label>
+                            <input type="text" name="fekspedisi" id="fekspedisi">
+                            <label for="fno-resi">No Resi</label>
+                            <input type="text" name="fno-resi" id="fno-resi">
                         </div>
                         <div class="right">                            
-                            <label for="fharga-barang">Harga Barang</label>
-                            <input type="text" name="fharga-barang" id="fharga-barang">
-                            <label for="fqty">Qty</label>
-                            <input type="text" name="fqty" id="fqty">
-                            <label for="fsatuan">Satuan</label>
-                            <input type="text" name="fsatuan" id="fsatuan">
+                            <label for="ftanggal">Tanggal</label>
+                            <input type="text" name="ftanggal" id="ftanggal">
+                            <label for="fstatus-order">Status Penjualan</label>
+                            <input type="text" name="fstatus-order" id="fstatus-order">
+                            <label for="fqty">Bukti Pembayaran</label>
+                            <img id="bukti-trf" name="bukti-trf" src="" alt="">
                         </div>
                     </div>
                     <div class="part-action">
-                        <button>Tambah</button>
-                        <button>Simpan</button>
-                        <button>Batal</button>
-                        <button>Hapus</button>
-                        <button>Cari</button>
-                        <button>Ubah</button>
-                        <button class="keluar">Keluar</button>
+                        <!-- <button type="submit" name="btn" id="btntambah" value="tambah">Tambah</button> -->
+                        <button type="submit" name="btn" id="btnsimpan" value="simpan">Simpan</button>
+                        <button type="button" name="btn" id="btnbatal"  onclick="batal()">Batal</button>
+                        <button type="button" name="btn" id="btnubah"   onclick="ubah()">Ubah</button>
+                        <button type="submit" name="btn" id="btnconfirm" value="konfirmasi">Konfirmasi</button>                        
                     </div>
                 </form>
             </div>
 
         </div>
     </section>
+
+<script>
+    const inputId = document.querySelector("#fid-penjualan");
+    const inputIdPlg = document.querySelector("#fid-pelanggan");
+    const inputSubtotal = document.querySelector("#fharga-subtotal");
+    const inputOngkir = document.querySelector("#fharga-ongkir");
+    const inputTotal = document.querySelector("#ftotal-harga");
+    const inputEkspedisi = document.querySelector("#fekspedisi");
+    const inputNoresi = document.querySelector("#fno-resi");
+    const inputTanggal = document.querySelector("#ftanggal");
+    const inputStatus = document.querySelector("#fstatus-order");    
+    const gambar = document.querySelector("#bukti-trf");
+
+    const btnTambah = document.querySelector("#btntambah");
+    const btnSimpan = document.querySelector("#btnsimpan");
+    const btnBatal = document.querySelector("#btnbatal");      
+    const btnUbah = document.querySelector("#btnubah");
+    const btnKonfirmasi = document.querySelector("#btnconfirm");
+
+    const myTableRows = document.querySelectorAll("#myTable tr");
+
+    inputId.readOnly = true;
+    inputIdPlg.readOnly = true;
+    inputSubtotal.readOnly = true;
+    inputOngkir.readOnly = true;
+    inputTotal.readOnly = true;
+    inputEkspedisi.readOnly = true;
+    inputNoresi.readOnly = true;
+    inputTanggal.readOnly = true;
+    inputStatus.readOnly = true;
+
+    btnSimpan.disabled = true;
+    btnSimpan.classList.add("disabled");
+    btnBatal.disabled = true;
+    btnBatal.classList.add("disabled");
+    btnUbah.disabled = true;
+    btnUbah.classList.add("disabled");
+    btnKonfirmasi.disabled = true;
+    btnKonfirmasi.classList.add("disabled");
+
+    function pilihBaris(row) {
+        const kolId = document.querySelector("#id" + row).innerHTML;
+        const kolIdPlg = document.querySelector("#pelanggan" + row).innerHTML;
+        const kolTanggal = document.querySelector("#tanggal" + row).innerHTML;
+        const kolSubtotal = document.querySelector("#subtotal" + row).innerHTML;
+        const kolOngkir = document.querySelector("#ongkir" + row).innerHTML;
+        const kolTotal = document.querySelector("#total" + row).innerHTML;
+        const kolStatus = document.querySelector("#status" + row).innerHTML;
+        const kolEkspedisi = document.querySelector("#ekspedisi" + row).innerHTML;
+        const kolNoresi = document.querySelector("#noresi" + row).innerHTML;
+
+        myTableRows.forEach((baris, index) => {
+            if ( index === row ) {
+                baris.style.background = 'lightgray';
+            } else {
+                baris.style.background = 'white';
+            }
+        });        
+
+        // gambar.removeAttribute("hidden");
+        gambar.src = "bukti_transfer/" + kolId + ".png";
+        
+        inputId.value = kolId;
+        inputIdPlg.value = kolIdPlg;
+        inputSubtotal.value = kolSubtotal;
+        inputOngkir.value = kolOngkir;
+        inputTotal.value = kolTotal;
+        inputEkspedisi.value = kolEkspedisi;
+        inputNoresi.value = kolNoresi;
+        inputTanggal.value = kolTanggal;
+        inputStatus.value = kolStatus;   
+        
+        if (inputStatus.value === 'dikemas') {
+            btnKonfirmasi.disabled = false;
+            btnKonfirmasi.classList.remove("disabled");
+            inputStatus.classList.add("red");
+        } else {
+            btnKonfirmasi.disabled = true;
+            btnKonfirmasi.classList.add("disabled");
+            inputStatus.classList.remove("red");
+        }
+
+        btnUbah.disabled = false;
+        btnUbah.classList.remove("disabled");        
+        btnBatal.disabled = false;
+        btnBatal.classList.remove("disabled");
+        btnSimpan.disabled = true;
+        btnSimpan.classList.add("disabled");
+    }
+
+    function ubah() {
+       inputEkspedisi.readOnly = false;
+       inputNoresi.readOnly = false;
+
+       inputEkspedisi.focus();
+
+        btnSimpan.disabled = false;
+        btnSimpan.classList.remove("disabled");        
+    }
+
+    function batal() {
+        gambar.hidden = true;
+        gambar.src = "";
+        
+        
+        inputKategori.readOnly = false;
+        inputNama.readOnly = false;
+        inputHargaBeli.readOnly = false;
+        inputHargaJual.readOnly = false;
+        
+        inputId.value = lastIdBarang;
+        inputHargaBeli.value = "";
+        inputHargaJual.value = "";
+        inputNama.value = "";
+
+        inputNama.focus();
+
+        btnUbah.disabled = true;
+        btnUbah.classList.add("disabled");
+        btnBatal.disabled = true;
+        btnBatal.classList.add("disabled");
+        btnSimpan.disabled = true;
+        btnSimpan.classList.add("disabled");
+        btnTambah.disabled = false;
+        btnTambah.classList.remove("disabled");
+        btnHapus.disabled = true;
+        btnHapus.classList.add("disabled");
+    }
+
+</script>
 
 </body>
 </html>

@@ -1,6 +1,8 @@
 <?php
+session_start();
 
 include "dbconn.php";
+
 $query = "SELECT * FROM tbbarang";
 $result = mysqli_query($connection, $query);
 
@@ -17,6 +19,15 @@ mysqli_close($connection);
 $link_wishlist = "login.php?ke=kategori.php";
 $link_account = "login.php?ke=kategori.php";
 $link_cart = "login.php?ke=kategori.php";
+
+if (isset($_SESSION["login"])) {
+    
+    if ( $_SESSION["login"] === true ) {
+        $link_wishlist = "wishlist.php";
+        $link_account = "myorders.php";
+        $link_cart = "myorders.php";
+    }
+}
 
 
 ?>
@@ -57,6 +68,13 @@ $link_cart = "login.php?ke=kategori.php";
             <a href="<?=$link_wishlist;?>"><button><i class='bx bx-heart' ></i></button></a>
             <a href="<?=$link_account;?>"><button><i class='bx bx-user' ></i></button></a>
             <a href="<?=$link_cart;?>"><button><i class='bx bx-cart'></i></button></a>
+            <?php 
+                if (isset($_SESSION["user"])) {
+            ?>        
+                    <a href="<?=$link_cart;?>"><span><i>Hello <?=$_SESSION["user"];?> ! </i></span></a>
+            <?php        
+                }
+            ?>
         </div>
     </header>
 
@@ -93,7 +111,7 @@ $link_cart = "login.php?ke=kategori.php";
                         <p class="product-desc"><?=$produk['id_kategori'];?></p>
                     </div>
                     <div class="harga">
-                        <span>Rp <?=$produk['harga_barang'];?></span>
+                        <span>Rp <?=$produk['harga_jual'];?></span>
                     </div>
                     <div class="like-icon">
                         <i class='bx bx-heart' ></i>

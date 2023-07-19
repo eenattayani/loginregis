@@ -1,10 +1,114 @@
 <?php
-if (isset($_POST["bayar"])) {
+session_start();
+
+if (!isset($_SESSION["iduser"])) {
     
-    $jlhProduct = $_POST["product-jlh"];
-    $subtotal = $_POST["subtotal"];
-    $ongkir = $_POST["ongkir"];    
-    $total = $_POST["total"];    
+    echo '
+        <script>
+            alert("Silahkan Login dahulu!");
+            location.replace("login.php");
+        </script>
+    ';
+}
+
+$idPelanggan = $_SESSION["iduser"];
+
+$link_wishlist = "wishlist.php";
+$link_account = "myorders.php";
+$link_cart = "myorders.php";
+
+include "dbconn.php";
+
+if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
+    $id = $_POST["terima"];
+
+     // update tbkeranjang
+    $queryCart = "UPDATE tbkeranjang SET status_beli='selesai' WHERE id_penjualan ='$id'";
+    $resultCart = mysqli_query($connection,$queryCart);
+
+    // update tbpenjualan
+    $updatePenjualan = "UPDATE tbpenjualan SET status_penjualan='selesai' WHERE id_penjualan ='$id'";
+    $resultupdateJual = mysqli_query($connection,$updatePenjualan);
+
+    header("location:myorders.php");
+
+
+} elseif (isset($_POST["konfirmasi-plg"])) { // konfirmasi sudah transfer
+
+    $id = $_POST["konfirmasi-plg"];
+
+    // proses upload gambar
+    $error = $_FILES["upload"]["error"];
+
+    if ($error === 0) {
+        // pindahkan file folder produk_upload
+        $namaFolder = "admin-page/bukti_transfer";
+        $tmp = $_FILES["upload"]["tmp_name"];
+        // $namaFile = $_FILES["upload"]["name"];
+        $namaFile = $id . ".png";
+        
+        if (move_uploaded_file($tmp, "$namaFolder/$namaFile")) {
+            $pesanError = "File sukses diupload";
+        } else {
+            $pesanError = "File gagal diupload";
+        }
+    } else {
+        $pesanError = "File gagal diupload";
+    }
+
+    // update tbkeranjang
+    $queryCart = "UPDATE tbkeranjang SET status_beli='dikemas' WHERE id_penjualan ='$id'";
+    $resultCart = mysqli_query($connection,$queryCart);
+
+    // update tbpenjualan
+    $updatePenjualan = "UPDATE tbpenjualan SET status_penjualan='dikemas' WHERE id_penjualan ='$id'";
+    $resultupdateJual = mysqli_query($connection,$updatePenjualan);
+
+    header("location:myorders.php");
+    
+} elseif ( isset($_POST["beli"]) || isset($_POST["bayar"]) ) {    
+    if (isset($_POST["beli"])) {        
+        $jlhProduct = $_POST["product-jlh"];
+        $subtotal = $_POST["subtotal"];
+        $ongkir = $_POST["ongkir"];    
+        $total = $_POST["total"];  
+    
+        //alamat tujuan kirim
+        $alamat = $_POST["tujuan-kirim"];
+        $wilayah = $_POST["hid-wilayah"];
+        $kodepos= $_POST["kode-pos"];
+    
+        $alamatKirim = $alamat . ", " . $wilayah . ", " . $kodepos;
+    
+        $t=time();
+        // echo($t . "<br>");
+        // echo(date("Y-m-d",$t));
+        $tanggal = date("Y-m-d",$t);
+        $idPenjualan = $t;
+    
+        // insert ke tabel penjualan
+        $queryPenjualan = "INSERT INTO tbpenjualan(id_penjualan,id_pelanggan,tanggal,harga_subtotal,harga_ongkir,harga_total,status_penjualan) VALUES ('$idPenjualan','$idPelanggan','$tanggal','$subtotal','$ongkir','$total','tunggu bayar')";
+        $resultPenjualan = mysqli_query($connection,$queryPenjualan);
+    
+        // update tbkeranjang
+        $query = "UPDATE tbkeranjang SET status_beli='tunggu bayar', alamat_tujuan='$alamatKirim', id_penjualan='$idPenjualan' WHERE id_pelanggan ='$idPelanggan' AND status_beli='keranjang'";
+        $result = mysqli_query($connection,$query);
+
+    } elseif (isset($_POST["bayar"])) {
+        $idPenjualan = $_POST["bayar"];
+
+        $query = "SELECT * FROM tbpenjualan WHERE id_penjualan ='$idPenjualan'";
+        $result = mysqli_query($connection,$query);
+
+        $row = mysqli_fetch_assoc($result);
+    
+        $subtotal = $row["harga_subtotal"];
+        $ongkir = $row["harga_ongkir"];    
+        $total = $row["harga_total"];
+
+    }
+
+    mysqli_close($connection);
 
 ?>
 
@@ -41,9 +145,16 @@ if (isset($_POST["bayar"])) {
             </div>
         </div>
         <div class="icon-bar">
-            <button><i class='bx bx-heart' ></i></button>
-            <button><i class='bx bx-user' ></i></button>
-            <button class="active-btn"><i class='bx bx-cart'></i></button>
+            <a href="<?=$link_wishlist;?>"><button><i class='bx bx-heart' ></i></button></a>
+            <a href="<?=$link_account;?>"><button><i class='bx bx-user' ></i></button></a>
+            <a href="<?=$link_cart;?>"><button><i class='bx bx-cart'></i></button></a>
+            <?php 
+                if (isset($_SESSION["user"])) {
+            ?>        
+                    <a href="<?=$link_cart;?>"><span><i>Hello <?=$_SESSION["user"];?> ! </i></span></a>
+            <?php        
+                }
+            ?>
         </div>
     </header>
 
@@ -57,33 +168,39 @@ if (isset($_POST["bayar"])) {
             </p>
         </div>
         <div class="content-main">
-            <h1>Pembayaran</h1>
+            <h1>Pembayaran</h1>   
+            <form action="pembayaran.php" method="POST" enctype="multipart/form-data">          
+                <div class="pembayaran-detail">                
+                    <h2>Detail Pembayaran</h2>       
+                    
+                    <div class="subtotal">
+                        <span>Subtotal</span>
+                        <span>Rp <?=$subtotal;?></span>
+                    </div>
+                    <div class="biaya-kirim">
+                        <span>Biaya Pengiriman</span>
+                        <span>Rp <?=$ongkir;?></span>
+                    </div>
+                    <div class="total">
+                        <span>Total</span>
+                        <span>Rp <?=$total;?></span>
+                    </div>
+                    <div><span>Pembayaran transfer ke Rekening BCA 192837465 an. Hoki Beauty</span></div>
+                    
+                    
+                        <div class="bukti-transfer">
+                            <h3>Bukti Transfer</h3>                    
+                            <input type="file" class="input-img" name="upload" id="upload" accept="image/png" required>
+                            <!-- <button>Pilih file</button> -->
+                            <div class="img-bukti-transfer">
+                                <img id="img" width="50%" height="165px" alt="bukti transfer">
+                            </div>
+                        </div>
+                    
+                        <button name="konfirmasi-plg" value="<?=$idPenjualan;?>" class="btn-kirim">Konfirmasi Sudah Transfer</button>
 
-            <div class="pembayaran-detail">                
-                <h2>Detail Pembayaran</h2>       
-                
-                <div class="subtotal">
-                    <span>Subtotal <span class="produk-item">(<?=$jlhProduct;?> items)</span></span>
-                    <span>Rp <?=$subtotal;?></span>
                 </div>
-                <div class="biaya-kirim">
-                    <span>Biaya Pengiriman</span>
-                    <span>Rp <?=$ongkir;?></span>
-                </div>
-                <div class="total">
-                    <span>Total</span>
-                    <span>Rp <?=$total;?></span>
-                </div>
-
-                <div class="bukti-transfer">
-                    <h3>Bukti Transfer</h3>
-                    <button>Pilih file</button>
-                    <div class="img-bukti-transfer">image</div>
-                </div>
-
-            </div>
-            
-            <button class="btn-kirim">Kirim</button>
+            </form> 
         </div>
         
     </section>
@@ -91,7 +208,23 @@ if (isset($_POST["bayar"])) {
     <footer>
         <p>Copyright &copy 2023</p>
     </footer>
-    
+
+    <script>
+        const inputUpload = document.querySelector("#upload");
+        const img = document.querySelector("#img");
+
+        inputUpload.addEventListener( "change" , ()=> {
+            if (inputUpload.files && inputUpload.files[0]) {
+                var reader = new FileReader();   
+                
+                reader.readAsDataURL(inputUpload.files[0]);
+
+                reader.onload = function (readerEvent) {
+                    img.src = readerEvent.target.result;
+                }
+            }
+        });        
+    </script>
 </body>
 </html>
 

@@ -1,3 +1,18 @@
+<?php
+
+include "../dbconn.php";
+
+$query = "SELECT * FROM tbkeranjang WHERE status_beli='selesai' ORDER BY id_penjualan DESC";
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    echo "Query gagal: ".mysqli_error($connection);    
+}
+
+mysqli_close($connection);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,49 +59,11 @@
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
                 <li><a href="data-laporan.php"><button class="active">Laporan</button></a></li>
-                <li><button class="btn-logout">Logout</button></li>
+                <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
         </div>
 
         <div class="main data">
-            <div class="tabel-data persediaan">
-                <h1>Laporan Persediaan</h1>
-                <div class="ket">
-                    <span class="admin">Admin : Verdy</span>
-                    <span class="tanggal">Senin, 3 Juli 2023</span>
-                </div>
-                <table>
-                    <thead>
-                        <tr>                            
-                            <th>Id Barang</th>
-                            <th>Id Kategori</th>                            
-                            <th>Nama Barang</th>                            
-                            <th>Harga Barang</th>                                                                                         
-                            <th>Stok</th>                            
-                            <th>Satuan</th>                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>0001</td>                            
-                            <td>KC001</td>                            
-                            <td>Clear Men Sport</td>                            
-                            <td>43.000</td>                            
-                            <td>40</td>                            
-                            <td>Pcs</td>                                                                                 
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="form-input persediaan">
-                <form action="">                    
-                    <div class="part-action">
-                        <button class="cetak">Cetak</button>
-                    </div>
-                </form>
-            </div>
-        
             <div class="tabel-data penjualan">
                 <h1>Laporan Penjualan</h1>
                 <div class="ket">
@@ -100,21 +77,35 @@
                             <th>Id Pelanggan</th>                            
                             <th>Id Barang</th>                            
                             <th>Nama Barang</th>                                                                                         
-                            <th>Qty</th>                            
-                            <th>Satuan</th>                            
+                            <th>Qty</th>                               
                             <th>Harga Satuan</th>                            
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                    if ( $result->num_rows === 0 ) {
+                    ?>
                         <tr>
-                            <td>PJ001</td>                            
-                            <td>00001</td>                            
-                            <td>00001</td>                            
-                            <td>Clear Men Sport</td>                            
-                            <td>5</td>                            
-                            <td>Pcs</td>                                                                                 
-                            <td>43.000</td>                            
+                            <td colspan="7"> == Belum ada data penjualan == </td>
                         </tr>
+                    <?php
+                    } else {
+                        $r = 1;
+                        while($row = mysqli_fetch_assoc($result)) {                           
+                            echo "
+                            <tr id=\"baris$r\" onclick=\"pilihBaris(". $r .")\">
+                                <td id=\"id$r\">" . $row["id_penjualan"] . "</td>                             
+                                <td id=\"pelanggan$r\">" . $row["id_pelanggan"] . "</td>                                
+                                <td id=\"idbarang$r\">" . $row["id_barang"] . "</td>                               
+                                <td id=\"namabarang$r\">" . $row["id_barang"] . "</td>                               
+                                <td id=\"qty$r\">" . $row["jlh_barang"] . "</td>                               
+                                <td id=\"harga$r\">" . $row["harga_satuan"] . "</td>                               
+                            </tr>
+                            ";
+                            $r++;
+                        }
+                    }
+                    ?>
                     </tbody>
                 </table>
             </div>

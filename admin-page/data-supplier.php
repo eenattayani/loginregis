@@ -126,7 +126,7 @@ mysqli_close($connection);
                 <li><a href="data-supplier.php"><button class="active">Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
-                <li><button class="btn-logout">Logout</button></li>
+                <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
         </div>
 
@@ -189,10 +189,9 @@ mysqli_close($connection);
                         <button type="submit" name="btn" id="btntambah" value="tambah">Tambah</button>
                         <button type="submit" name="btn" id="btnsimpan" value="simpan">Simpan</button>
                         <button type="button" name="btn" id="btnbatal"  onclick="batal()">Batal</button>
-                        <button type="submit" name="btn" id="btnhapus"  onclick="return confirm('Yakin Hapus Data?')" value="hapus">Hapus</button>
-                        <button type="button" name="btn" id="btncari"   value="cari">Cari</button>
+                        <button type="submit" name="btn" id="btnhapus"  onclick="return confirm('Yakin Hapus Data?')" value="hapus">Hapus</button>                        
                         <button type="button" name="btn" id="btnubah"   onclick="ubah()">Ubah</button>
-                        <button class="keluar">Keluar</button>
+                        
                     </div>
                 </form>
             </div>
@@ -210,7 +209,6 @@ mysqli_close($connection);
     const btnSimpan = document.querySelector("#btnsimpan");
     const btnBatal = document.querySelector("#btnbatal");
     const btnHapus = document.querySelector("#btnhapus");
-    const btnCari = document.querySelector("#btncari");
     const btnUbah = document.querySelector("#btnubah");
 
     btnSimpan.disabled = true;
@@ -219,8 +217,6 @@ mysqli_close($connection);
     btnBatal.classList.add("disabled");
     btnHapus.disabled = true;
     btnHapus.classList.add("disabled");
-    btnCari.disabled = true;
-    btnCari.classList.add("disabled");
     btnUbah.disabled = true;
     btnUbah.classList.add("disabled");
 

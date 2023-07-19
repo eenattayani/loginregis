@@ -11,8 +11,8 @@ if (isset($_SESSION["login"])) {
     
     if ( $_SESSION["login"] === true ) {
         $link_wishlist = "wishlist.php";
-        $link_account = "wishlist.php";
-        $link_cart = "wishlist.php";
+        $link_account = "myorders.php";
+        $link_cart = "myorders.php";
     }
 }
     
@@ -53,6 +53,14 @@ if (isset($_SESSION["login"])) {
             <a href="<?=$link_wishlist;?>"><button><i class='bx bx-heart' ></i></button></a>
             <a href="<?=$link_account;?>"><button><i class='bx bx-user' ></i></button></a>
             <a href="<?=$link_cart;?>"><button><i class='bx bx-cart'></i></button></a>
+            <?php 
+                if (isset($_SESSION["user"])) {
+            ?>        
+                    <a href="<?=$link_cart;?>"><span><i>Hello <?=$_SESSION["user"];?> ! </i></span></a>
+            <?php        
+                }
+            ?>
+
         </div>
     </header>
 

@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+if (isset($_SESSION["login"])) {
+    echo '
+    <script>
+    alert("Anda telah keluar!");        
+    </script>
+    '; 
+}
+
 session_destroy();
 
 // $_SESSION["login"] = false;
@@ -43,7 +52,11 @@ if ( isset($_POST["login"]) )
         if ( $email === $row["email_pelanggan"] && $pass === $row["password"] ) {
             session_start();                        
             $_SESSION["login"] = true;
+            $_SESSION["iduser"] = $row["id_pelanggan"];
             $_SESSION["user"] = $row["nama_pelanggan"];
+            $_SESSION["emailuser"] = $row["email_pelanggan"];
+            $_SESSION["alamatuser"] = $row["alamat_pelanggan"];
+            $_SESSION["nohp"] = $row["no_hp"];
             echo '
             <script>
             alert("Login Berhasil!");    

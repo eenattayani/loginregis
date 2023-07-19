@@ -44,7 +44,7 @@
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
-                <li><button class="btn-logout">Logout</button></li>
+                <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
         </div>
 
@@ -101,10 +101,8 @@
                         <button>Tambah</button>
                         <button>Simpan</button>
                         <button>Batal</button>
-                        <button>Hapus</button>
-                        <button>Cari</button>
-                        <button>Ubah</button>
-                        <button class="keluar">Keluar</button>
+                        <button>Hapus</button>                        
+                        <button>Ubah</button>                        
                     </div>
                 </form>
             </div>

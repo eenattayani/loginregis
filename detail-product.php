@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $namaBarang ="Barangnya";
 
 if(isset($_GET["id"])){
@@ -6,6 +8,7 @@ if(isset($_GET["id"])){
     
     
     include "dbconn.php";
+
     $query = "SELECT * FROM tbbarang WHERE id_barang='$id'";
     $result = mysqli_query($connection, $query);
 
@@ -13,7 +16,7 @@ if(isset($_GET["id"])){
 
     $idBarang = $data["id_barang"];
     $namaBarang = $data["nama_barang"];
-    $hargaBarang = $data["harga_barang"];
+    $hargaBarang = $data["harga_jual"];
 
     
     if (!$result) {
@@ -29,6 +32,15 @@ if(isset($_GET["id"])){
 $link_wishlist = "login.php?ke=detail-product.php?id=$id";
 $link_account = "login.php?ke=detail-product.php?id=$id";
 $link_cart = "login.php?ke=detail-product.php?id=$id";
+
+if (isset($_SESSION["login"])) {
+    
+    if ( $_SESSION["login"] === true ) {
+        $link_wishlist = "wishlist.php";
+        $link_account = "myorders.php";
+        $link_cart = "myorders.php";
+    }
+}
 
 ?>
 
@@ -68,6 +80,13 @@ $link_cart = "login.php?ke=detail-product.php?id=$id";
             <a href="<?=$link_wishlist;?>"><button><i class='bx bx-heart' ></i></button></a>
             <a href="<?=$link_account;?>"><button><i class='bx bx-user' ></i></button></a>
             <a href="<?=$link_cart;?>"><button><i class='bx bx-cart'></i></button></a>
+            <?php 
+                if (isset($_SESSION["user"])) {
+            ?>        
+                    <a href="<?=$link_cart;?>"><span><i>Hello <?=$_SESSION["user"];?> ! </i></span></a>
+            <?php        
+                }
+            ?>
         </div>
     </header>
 
@@ -91,7 +110,7 @@ $link_cart = "login.php?ke=detail-product.php?id=$id";
                 <p>Produk ini memiliki sangat banyak kegunaan dalam kehidupan sehari-hari manusia untuk menunjang berbagai aktivitas yang beragam di masyarakat. </p>
             </div>
             <div class="product-action">
-                <form action="checkout.php" method="post">
+                <form action="wishlist.php" method="post">
                     <div class="input">
                         <input type="hidden" name="id-barang" value="<?=$idBarang;?>">
                         <input type="hidden" name="harga-barang" value="<?=$hargaBarang;?>">
@@ -109,7 +128,7 @@ $link_cart = "login.php?ke=detail-product.php?id=$id";
                         </div>
                     </div>
                     <div class="action">
-                        <button type="submit" name="beli" class="keranjang">+ Keranjang</button>
+                        <button type="submit" name="keranjang" class="keranjang">+ Keranjang</button>
                         <button type="submit" name="beli" class="beli">Beli</button>
                     </div>
                 </form>
