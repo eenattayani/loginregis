@@ -1,17 +1,42 @@
 <?php 
 
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+include "adm-config.php";
 include "../dbconn.php";
 
 // cek button submit
 if (isset($_POST["btn"])) {
-    
+
     $id = $_POST["fid-barang"];
     $kategori = $_POST["fid-kategori"];
     $nama = $_POST["fnama-barang"];
     $harga_beli = $_POST["fharga-beli"];
     $harga_jual = $_POST["fharga-jual"];
 
+    // cek apakah nama_barang sudah tersedia sebelumnya
+    $query = "SELECT * FROM tbbarang";
+    $result = mysqli_query($connection, $query);
+   
+
+
     if ($_POST["btn"] === "tambah") {
+        
+        if ( $result->num_rows !== 0 ) {      
+            while($rowNamaBarang = mysqli_fetch_assoc($result)){
+                if ( strtolower($rowNamaBarang["nama_barang"]) === strtolower($nama) ) {
+                    echo '
+                    <script>
+                        alert("Nama Barang Sudah Tersedia!");
+                        location.replace("data-barang.php");
+                    </script>
+                ';
+                exit;
+                }
+            }
+        }
 
         // proses upload gambar
         $error = $_FILES["fgambar-barang"]["error"];
@@ -49,8 +74,29 @@ if (isset($_POST["btn"])) {
             ';
         }
     } else if ($_POST["btn"] === "simpan") {
+        // if (isset($_POST["fgambar-barang"])) {       
+            // proses upload gambar
+            $error = $_FILES["fgambar-barang"]["error"];
+
+            if ($error === 0) {
+                // pindahkan file folder produk_upload
+                $namaFolder = "produk_upload";
+                $tmp = $_FILES["fgambar-barang"]["tmp_name"];
+                // $namaFile = $_FILES["fgambar-barang"]["name"];
+                $namaFile = $id . ".png";
+                
+                if (move_uploaded_file($tmp, "$namaFolder/$namaFile")) {
+                    $pesanError = "File sukses diupload";
+                } else {
+                    $pesanError = "File gagal diupload";
+                }
+            } else {
+                $pesanError = "File gagal diupload";
+            }
+        // }
+
         $queryUbah = "UPDATE tbbarang SET id_kategori = '$kategori', nama_barang = '$nama', harga_beli = '$harga_beli', harga_jual = '$harga_jual' WHERE id_barang = '$id'";
-        $resultUbah = mysqli_query($connection, $queryUbah);
+        $resultUbah = mysqli_query($connection, $queryUbah);        
 
         if ($resultUbah) {
             echo '
@@ -177,6 +223,8 @@ mysqli_close($connection);
                 <li><a href="data-pelanggan.php"><button>Data Pelanggan</button></a></li>
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
+                <li><a href="data-ongkir.php"><button>Data Ongkir</button></a></li>
+                <li><a href="data-keranjang.php"><button>Keranjang</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
                 <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
@@ -193,6 +241,7 @@ mysqli_close($connection);
                             <th>Nama Barang</th>
                             <th>Harga Beli</th>
                             <th>Harga Jual</th>
+                            <th>Stok</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,7 +249,7 @@ mysqli_close($connection);
                         if ( $result->num_rows === 0 ) {
                     ?>
                         <tr>
-                            <td colspan="5"> == Tidak ada data ==</td>
+                            <td colspan="6"> == Tidak ada data ==</td>
                         </tr>
                     <?php    
                         } else {                    
@@ -213,6 +262,7 @@ mysqli_close($connection);
                                     <td id=\"nama$r\">" . $row["nama_barang"] . "</td>                               
                                     <td id=\"hargabeli$r\">" . $row["harga_beli"] . "</td>                               
                                     <td id=\"hargajual$r\">" . $row["harga_jual"] . "</td>                               
+                                    <td id=\"stok$r\">" . $row["stok"] . "</td>                               
                                 </tr>
                                 ";
                                 $r++;
@@ -327,13 +377,14 @@ mysqli_close($connection);
         inputKategori.value = kolKategori;
         inputNama.value = kolNama;        
         inputHargaBeli.value = kolHargaBeli;        
-        inputHargaJual.value = kolHargaJual;    
+        inputHargaJual.value = kolHargaJual; 
 
         inputId.readOnly = true;
         inputKategori.readOnly = true;
         inputNama.readOnly = true;
         inputHargaBeli.readOnly = true;
         inputHargaJual.readOnly = true;
+        inputGambar.readOnly = true;
 
         btnUbah.disabled = false;
         btnUbah.classList.remove("disabled");
@@ -352,6 +403,7 @@ mysqli_close($connection);
         inputNama.readOnly = false;
         inputHargaBeli.readOnly = false;
         inputHargaJual.readOnly = false;
+        inputGambar.readOnly = false;
 
         inputNama.focus();
 
@@ -370,6 +422,7 @@ mysqli_close($connection);
         inputNama.readOnly = false;
         inputHargaBeli.readOnly = false;
         inputHargaJual.readOnly = false;
+        inputGambar.readOnly = false;
         
         inputId.value = lastIdBarang;
         inputHargaBeli.value = "";

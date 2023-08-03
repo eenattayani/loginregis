@@ -295,6 +295,7 @@ hr {
 
 tr {
   transition: 0.3s;
+  line-height: 22px;
 }
 
 tr:hover {
@@ -304,6 +305,7 @@ tr:hover {
 
 th {
   background: var(--th-bg-color);
+  line-height: 24px;
 }
 
 th:hover {

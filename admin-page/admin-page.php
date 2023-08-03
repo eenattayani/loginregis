@@ -1,5 +1,6 @@
 <?php 
 
+include "adm-config.php";
 include "../dbconn.php";
 
 // cek button submit
@@ -125,9 +126,11 @@ mysqli_close($connection);
                 <li><a href="data-barang.php"><button>Data Barang</button></a></li>
                 <li><a href="data-pembelian.php"><button>Data Pembelian</button></a></li>
                 <li><a href="data-penjualan.php"><button>Data Penjualan</button></a></li>
-                <li><a href="data-pelanggan.php"><button class="active">Data Pelanggan</button></a></li>
+                <li><a href="data-pelanggan.php"><button>Data Pelanggan</button></a></li>
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
+                <li><a href="data-ongkir.php"><button>Data Ongkir</button></a></li>
+                <li><a href="data-keranjang.php"><button>Keranjang</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
                 <li><button class="btn-logout">Logout</button></li>
             </ul>

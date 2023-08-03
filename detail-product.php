@@ -27,6 +27,7 @@ if(isset($_GET["id"])){
     mysqli_close($connection);
 } else {
     header("location:kategori.php");
+    exit;
 }
 
 $link_wishlist = "login.php?ke=detail-product.php?id=$id";

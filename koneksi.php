@@ -5,7 +5,10 @@ include 'dbconn.php';
 if (isset($_POST['regis'])) {
       
     $lastNoPel = mysqli_query($connection, "SELECT no_urut FROM tbpelanggan ORDER BY no_urut DESC LIMIT 1");
-    $newNoPel = $lastNoPel + 1;
+    $row = mysqli_fetch_assoc($lastNoPel);
+    $newNoPel = intval($row["no_urut"]);
+    $newNoPel = $newNoPel + 1;
+
     if ( $newNoPel < 10 ) { $newNoPelString = "PL00" . (string) $newNoPel; }
     elseif ( $newNoPel < 100 ) { $newNoPelString = "PL0" . (string) $newNoPel; }
     else { $newNoPelString = "PL" . (string) $newNoPel; }
@@ -31,6 +34,8 @@ if (isset($_POST['regis'])) {
       location.replace("login.php");
     </script>
     ';    
+
+    exit;
 
 } else {
   echo '<script>alert("gagal registrasi!");</script>';  

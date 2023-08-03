@@ -9,6 +9,8 @@ if (!isset($_SESSION["iduser"])) {
             location.replace("login.php");
         </script>
     ';
+
+    exit;
 }
 
 
@@ -26,23 +28,64 @@ include "dbconn.php";
 
 if ( isset($_POST["checkout"]) ) {
 
-    $idBarang = "IB0001";
-    $jlhProduct = 3;
-    $hargaBarang = 15000;    
+    $idBarang = "";
+    $jlhProduct = 0;
+    $hargaBarang = 0;    
     
     $subtotal = 0;
-    $ongkir = 15000;
+    $ongkir = 0;
     $total = $subtotal + $ongkir;    
+
+
+     // ambil id_barang dan jlh_barang berdasarkan id_pelanggan, status_beli, check_status
+    $queryIdJumlah = "SELECT id_barang, jlh_barang FROM tbkeranjang WHERE id_pelanggan='$idPelanggan' AND status_beli='keranjang' AND check_status='1'";
+    $resultIdJumlah = mysqli_query($connection, $queryIdJumlah);
+
+    if ( $resultIdJumlah->num_rows !== 0) {
+        while ( $rowidjumlah = mysqli_fetch_assoc($resultIdJumlah)) {
+            $rIdBarang = $rowidjumlah["id_barang"];
+            $rJumlah = $rowidjumlah["jlh_barang"];
+
+            $rJlhTbbarang = mysqli_query($connection,"SELECT stok FROM tbbarang WHERE id_barang='$rIdBarang'");
+            if ( $rJlhTbbarang->num_rows !== 0) {
+                $jlhTbbarang = mysqli_fetch_assoc($rJlhTbbarang);
+
+                $stok = $jlhTbbarang["stok"];
+
+                if ( $rJumlah > $stok ) {
+                    header("location:wishlist.php?errorstok=$rIdBarang");
+                    exit;
+                }
+            }
+
+            // update pengurangan jumlah stok barang
+            // mysqli_query($connection, "UPDATE tbbarang SET stok=stok - $rJumlah WHERE id_barang='$rIdBarang'");
+        }   
+    }
+
+
+
+
 
     // ambil data ongkir
     $query = "SELECT * FROM tbongkir";
     $result = mysqli_query($connection, $query);
 
     // panggil tabel keranjang dengan id pelanggan
-    $queryCart = "SELECT * FROM tbkeranjang WHERE id_pelanggan ='$idPelanggan' AND status_beli='keranjang'";
+    $queryCart = "SELECT * FROM tbkeranjang WHERE id_pelanggan ='$idPelanggan' AND status_beli='keranjang' AND check_status='1'";
     $resultCart = mysqli_query($connection, $queryCart);
 
     mysqli_close($connection);
+
+    if ( $resultCart->num_rows === 0 ) {
+        echo '
+        <script>
+            alert("pilih barang yang akan dibeli!");   
+            location.replace("wishlist.php");             
+        </script>
+        ';
+        exit;
+    }
 
 
 ?>
@@ -270,5 +313,6 @@ if ( isset($_POST["checkout"]) ) {
 <?php
 } else {
     header("location:kategori.php");
+    exit;
 }
 ?>

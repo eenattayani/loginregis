@@ -1,6 +1,8 @@
 <?php 
 
+include "adm-config.php";
 include "../dbconn.php";
+
 
 // cek button submit
 if (isset($_POST["btn"])) {
@@ -68,6 +70,16 @@ if (isset($_POST["btn"])) {
 
 }
 
+// ambil no urut terakhir pelanggan
+$lastNoPel = mysqli_query($connection, "SELECT no_urut FROM tbpelanggan ORDER BY no_urut DESC LIMIT 1");
+$row = mysqli_fetch_assoc($lastNoPel);
+$newNoPel = intval($row["no_urut"]);
+$newNoPel = $newNoPel + 1;
+
+if ( $newNoPel < 10 ) { $newNoPelString = "PL00" . (string) $newNoPel; }
+elseif ( $newNoPel < 100 ) { $newNoPelString = "PL0" . (string) $newNoPel; }
+else { $newNoPelString = "PL" . (string) $newNoPel; }
+
 // ambil data dari tabel tbpelanggan
 $query = "SELECT * FROM tbpelanggan";
 $result = mysqli_query($connection, $query);
@@ -127,6 +139,8 @@ mysqli_close($connection);
                 <li><a href="data-pelanggan.php"><button class="active">Data Pelanggan</button></a></li>
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
+                <li><a href="data-ongkir.php"><button>Data Ongkir</button></a></li>
+                <li><a href="data-keranjang.php"><button>Keranjang</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
                 <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
@@ -180,7 +194,7 @@ mysqli_close($connection);
                     <div class="part-input">
                         <div class="left">
                             <label for="fid-pelanggan">Id Pelanggan</label>
-                            <input type="text" name="fid-pelanggan" id="fid-pelanggan" oninput="inputData()" placeholder="id pelanggan" required>
+                            <input type="text" name="fid-pelanggan" id="fid-pelanggan" oninput="inputData()" placeholder="id pelanggan" value="<?=$newNoPelString;?>" required>
                             <label for="fnama-pelanggan">Nama</label>
                             <input type="text" name="fnama-pelanggan" id="fnama-pelanggan" oninput="inputData()" placeholder="nama" required>
                             <label for="femail-pelanggan">Email</label>

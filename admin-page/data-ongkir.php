@@ -1,5 +1,6 @@
 <?php
 
+include "adm-config.php";
 include "../dbconn.php";
 
 
@@ -126,6 +127,8 @@ mysqli_close($connection);
                 <li><a href="data-pelanggan.php"><button>Data Pelanggan</button></a></li>
                 <li><a href="data-supplier.php"><button>Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
+                <li><a href="data-ongkir.php"><button class="active">Data Ongkir</button></a></li>
+                <li><a href="data-keranjang.php"><button>Keranjang</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
                 <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>

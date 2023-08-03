@@ -326,12 +326,20 @@ section .sidebar .sidebar-content ul li {
   transition: 0.3s;
 }
 
+section .sidebar .sidebar-content ul li a {
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 section .sidebar .sidebar-content ul li.active {
   color: black;
 }
 
 section .sidebar .sidebar-content ul li:hover {
-  background: seashell;
+  background: rgb(209, 197, 189);
   color: #000;
 }
 
@@ -370,7 +378,8 @@ section .main-content .main-content-products {
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
+  column-gap: 50px;
   padding-right: 20px;
   flex-wrap: wrap;
 }

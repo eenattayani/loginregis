@@ -9,6 +9,8 @@ if (!isset($_SESSION["iduser"])) {
             location.replace("login.php");
         </script>
     ';
+
+    exit;
 }
 
 $link_wishlist = "wishlist.php";
@@ -147,5 +149,5 @@ mysqli_close($connection);
     
 </body>
 </html>
-<?php 
+
 

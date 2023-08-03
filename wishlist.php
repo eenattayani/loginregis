@@ -1,6 +1,18 @@
 <?php
 session_start();
 
+$pesanError = "";
+
+if (isset($_GET["errorstok"])) {
+    // echo '
+    //     <script>
+    //         alert("Stok Barang ' . $_GET["errorstok"] . ' tidak mencukupi!");            
+    //     </script>
+    // ';
+
+    $pesanError = "=== Stok Barang " . $_GET["errorstok"] . " tidak mencukupi ===";
+}
+
 if (!isset($_SESSION["iduser"])) {
     
     echo '
@@ -9,6 +21,8 @@ if (!isset($_SESSION["iduser"])) {
             location.replace("login.php");
         </script>
     ';
+
+    exit;
 }
 
 $link_wishlist = "wishlist.php";
@@ -34,7 +48,7 @@ if (isset($_POST["keranjang"])) {
 
 
     if ( $result->num_rows === 0 ) {
-        $queryTambah = "INSERT INTO tbkeranjang (id_pelanggan, id_barang, status_beli, jlh_barang, harga_satuan) VALUES ('$idPelanggan','$idBarang','$statusBeli','$jlhProduct','$hargaBarang')";
+        $queryTambah = "INSERT INTO tbkeranjang (id_pelanggan, id_barang, status_beli, jlh_barang, harga_satuan, check_status) VALUES ('$idPelanggan','$idBarang','$statusBeli','$jlhProduct','$hargaBarang','1')";
         $resultTambah = mysqli_query($connection, $queryTambah);
 
         if ($resultTambah) {
@@ -44,6 +58,8 @@ if (isset($_POST["keranjang"])) {
                 location.replace("kategori.php");
             </script>
             ';
+
+            exit;
         } else {
             echo '
             <script>
@@ -66,6 +82,8 @@ if (isset($_POST["keranjang"])) {
                 location.replace("kategori.php");             
             </script>
             ';
+
+            exit;
         } else {
             echo '
             <script>
@@ -87,7 +105,7 @@ if (isset($_POST["keranjang"])) {
     $result = mysqli_query($connection, $query);
 
     if ( $result->num_rows === 0 ) {
-        $queryTambah = "INSERT INTO tbkeranjang (id_pelanggan, id_barang, status_beli, jlh_barang, harga_satuan) VALUES ('$idPelanggan','$idBarang','$statusBeli','$jlhProduct','$hargaBarang')";
+        $queryTambah = "INSERT INTO tbkeranjang (id_pelanggan, id_barang, status_beli, jlh_barang, harga_satuan, check_status) VALUES ('$idPelanggan','$idBarang','$statusBeli','$jlhProduct','$hargaBarang','1')";
         $resultTambah = mysqli_query($connection, $queryTambah);       
     }
 
@@ -190,17 +208,23 @@ mysqli_close($connection);
 
             <div class="wishlist-detail">                
                 <h2>Wishlist</h2>
+                <p><i><?=$pesanError;?></i></p>
                 <?php 
                     $checkoutState = true;
                     if ( $result->num_rows === 0 ) {
                         echo "<p>Data Keranjang Kosong</p>";
                         $checkoutState = false;
                     } else {
+                        $rp = 1;
                         while($row = mysqli_fetch_assoc($result)) {   
                 ?>               
                         <form action="" method="POST">
-                            <div class="list-wishlist">
+                            <div class="list-wishlist">                                
                                 <div class="img-nama">
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="check-status" value="<?=$row["id_barang"]. "&" .$row["id_pelanggan"];?>" <?php if ( $row["check_status"] === '1' ) { echo "checked"; }?> onchange="checkUncheck(event)">
+                                        <!-- <input type="checkbox" value="12" onchange="checkUncheck(event)"> -->
+                                    </div>
                                     <div class="img"><img src="admin-page/produk_upload/<?=$row["id_barang"];?>.png" alt=""></div>
                                     <div class="nama-qty">
                                         <span class="nama"><?=$row["id_barang"];?></span>
@@ -223,6 +247,7 @@ mysqli_close($connection);
                             </div>                                                  
                         </form>                            
                 <?php            
+                        $rp++;    
                         } 
                     }
                 ?>
@@ -243,8 +268,52 @@ mysqli_close($connection);
     <footer>
         <p>Copyright &copy 2023</p>
     </footer>
-    
+
+    <script>       
+        
+        function checkUncheck(event){
+            const value = event.target.value;            
+            let statusChecked = 1;
+            
+            // console.log(value);
+            // console.log(event.target.checked);
+
+            if (event.target.checked) {
+                statusChecked = 1;
+            } else {
+                statusChecked = 0;
+            }
+
+            const idBarang = value.split("&")[0];
+            const idPelanggan = value.split("&")[1];
+
+            // console.log("id barang: " , idBarang );
+            // console.log("id pelanggan: " , idPelanggan );
+
+            ubahStatusCheck(idBarang, idPelanggan, statusChecked);
+        }
+
+        function ubahStatusCheck(idBarang, idPelanggan, statusChecked) {            
+            let ajaxRequest = new XMLHttpRequest();            
+            ajaxRequest.onreadystatechange = function () {                
+                if (ajaxRequest.readyState == 4) {
+                    let responTeks = ajaxRequest.responseText;
+
+                    // alert(`responnya: ${responTeks}`);                        
+                    // if (responTeks == "0") {
+                    //     alert(`Pengiriman gagal, perangkat tidak terhubung!`);                        
+                    // } else if (responTeks == "1") {
+                    //     alert(`Pengiriman berhasil!`);
+                    // }
+                }
+            };
+
+            ajaxRequest.open("POST", "wishlist-query.php", true);
+            ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajaxRequest.send(`idbarang=${idBarang}&idpelanggan=${idPelanggan}&state=${statusChecked}`);
+        }
+    </script>    
 </body>
 </html>
-<?php 
+ 
 

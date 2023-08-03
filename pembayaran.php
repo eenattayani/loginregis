@@ -9,6 +9,8 @@ if (!isset($_SESSION["iduser"])) {
             location.replace("login.php");
         </script>
     ';
+
+    exit;
 }
 
 $idPelanggan = $_SESSION["iduser"];
@@ -30,7 +32,16 @@ if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
     $updatePenjualan = "UPDATE tbpenjualan SET status_penjualan='selesai' WHERE id_penjualan ='$id'";
     $resultupdateJual = mysqli_query($connection,$updatePenjualan);
 
-    header("location:myorders.php");
+    echo '
+        <script>
+            alert("Barang Sudah Diterima!");
+            location.replace("myorders.php");
+        </script>
+    ';
+
+    exit;
+    
+    // header("location:myorders.php");
 
 
 } elseif (isset($_POST["konfirmasi-plg"])) { // konfirmasi sudah transfer
@@ -65,6 +76,7 @@ if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
     $resultupdateJual = mysqli_query($connection,$updatePenjualan);
 
     header("location:myorders.php");
+    exit;
     
 } elseif ( isset($_POST["beli"]) || isset($_POST["bayar"]) ) {    
     if (isset($_POST["beli"])) {        
@@ -85,13 +97,27 @@ if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
         // echo(date("Y-m-d",$t));
         $tanggal = date("Y-m-d",$t);
         $idPenjualan = $t;
+
+        // ambil id_barang dan jlh_barang berdasarkan id_pelanggan, status_beli, check_status
+        $queryIdJumlah = "SELECT id_barang, jlh_barang FROM tbkeranjang WHERE id_pelanggan='$idPelanggan' AND status_beli='keranjang' AND check_status='1'";
+        $resultIdJumlah = mysqli_query($connection, $queryIdJumlah);
+
+        if ( $resultIdJumlah->num_rows !== 0) {
+            while ( $rowidjumlah = mysqli_fetch_assoc($resultIdJumlah)) {
+                $rIdBarang = $rowidjumlah["id_barang"];
+                $rJumlah = $rowidjumlah["jlh_barang"];
+            
+                // update pengurangan jumlah stok barang
+                mysqli_query($connection, "UPDATE tbbarang SET stok=stok - $rJumlah WHERE id_barang='$rIdBarang'");
+            }   
+        }
     
         // insert ke tabel penjualan
         $queryPenjualan = "INSERT INTO tbpenjualan(id_penjualan,id_pelanggan,tanggal,harga_subtotal,harga_ongkir,harga_total,status_penjualan) VALUES ('$idPenjualan','$idPelanggan','$tanggal','$subtotal','$ongkir','$total','tunggu bayar')";
-        $resultPenjualan = mysqli_query($connection,$queryPenjualan);
-    
+        $resultPenjualan = mysqli_query($connection,$queryPenjualan);            
+
         // update tbkeranjang
-        $query = "UPDATE tbkeranjang SET status_beli='tunggu bayar', alamat_tujuan='$alamatKirim', id_penjualan='$idPenjualan' WHERE id_pelanggan ='$idPelanggan' AND status_beli='keranjang'";
+        $query = "UPDATE tbkeranjang SET status_beli='tunggu bayar', alamat_tujuan='$alamatKirim', id_penjualan='$idPenjualan' WHERE id_pelanggan ='$idPelanggan' AND status_beli='keranjang' AND check_status='1'";
         $result = mysqli_query($connection,$query);
 
     } elseif (isset($_POST["bayar"])) {
@@ -231,5 +257,6 @@ if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
 <?php
 } else {
     header("location:kategori.php");
+    exit;
 }
 ?>

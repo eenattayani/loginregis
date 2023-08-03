@@ -3,18 +3,29 @@ session_start();
 
 include "dbconn.php";
 
-$query = "SELECT * FROM tbbarang";
-$result = mysqli_query($connection, $query);
+$kategori = "Semua";
 
-if (!$result) {
-    echo "Query gagal: ".mysqli_error($connection);    
+if (isset($_GET["id"])) {
+    $idKategori = $_GET["id"];
+    $kategori = $_GET["name"];
+
+    // tampilkan barang yang ready stock
+    $query = "SELECT * FROM tbbarang WHERE stok != 0 AND id_kategori='$idKategori'";
+    $result = mysqli_query($connection, $query);
+} else {
+    // tampilkan barang yang ready stock
+    $query = "SELECT * FROM tbbarang WHERE stok != 0";
+    $result = mysqli_query($connection, $query);
 }
+
+
+//** ambil kategori **/
+$queryKategori = "SELECT * FROM tbkategori";
+$resultKategori = mysqli_query($connection, $queryKategori);
+
 
 mysqli_close($connection);
 
-// while ($row = mysqli_fetch_assoc($result)) {
-    
-// }
 
 $link_wishlist = "login.php?ke=kategori.php";
 $link_account = "login.php?ke=kategori.php";
@@ -86,21 +97,25 @@ if (isset($_SESSION["login"])) {
             </div>
             <div class="sidebar-content">
                 <ul>
-                    <li>Aksesoris<i class='bx bxs-chevron-right'></i></li>
-                    <li>Kecantikan<i class='bx bxs-chevron-right'></i></li>
-                    <li>Atk<i class='bx bxs-chevron-right'></i></li>
-                    <li>Mainan Anak<i class='bx bxs-chevron-right'></i></li>
+                    <li><a href="kategori.php">Semua<i class='bx bxs-chevron-right'></i></a></li>
+                <?php while($rowKategori = mysqli_fetch_assoc($resultKategori)) { ?>
+                    <li><a href="kategori.php?id=<?=$rowKategori["id_kategori"];?>&name=<?=$rowKategori["nama_kategori"];?>"><?=$rowKategori["nama_kategori"];?><i class='bx bxs-chevron-right'></i></a></li>
+                <?php } ?>                    
                 </ul>
             </div>
 
         </div>
         <div class="main-content">
             <div class="main-content-text">
-                <div class="text-left">Atk</div>
+                <div class="text-left"><?=$kategori;?></div>
                 <div class="text-right"><span class="active">New</span><span>Recommended</span></div>
             </div>
             <div class="main-content-products">
-            <?php while ($produk = mysqli_fetch_assoc($result)) { ?>
+            <?php
+            if ($result->num_rows === 0) {
+                echo "<p><i> === produk belum ada === </i></p>";
+            } else {
+                while ($produk = mysqli_fetch_assoc($result)) { ?>
 
                 <div class="product-box">
                     <div class="img">
@@ -118,7 +133,9 @@ if (isset($_SESSION["login"])) {
                     </div>
                 </div>        
 
-            <?php }  ?>
+            <?php } 
+            } 
+            ?>
                 
             </div>
         </div>

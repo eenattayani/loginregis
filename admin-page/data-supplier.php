@@ -1,5 +1,6 @@
 <?php 
 
+include "adm-config.php";
 include "../dbconn.php";
 
 // cek button submit
@@ -66,6 +67,35 @@ if (isset($_POST["btn"])) {
 
 }
 
+//** ambil data dari tabel tbsupplier **/
+$query = "SELECT * FROM tbsupplier";
+$result = mysqli_query($connection, $query);
+
+if (!$result) {
+    echo "Query gagal: ".mysqli_error($connection);    
+}
+
+//** ambil nilai terakhir ID SUPPLIER **/
+
+$lastIdSupplier = 0;
+while($rowId = mysqli_fetch_assoc($result)) {                                
+    // ubah string ke integer untuk mencari nilai terbesar  
+    $idSupplier = (int)substr($rowId["id_supplier"] , 2);
+
+    if ( $idSupplier > $lastIdSupplier ) {        
+        $lastIdSupplier = $idSupplier;
+    }     
+} 
+
+// kembalikan nilai integer ke string
+$newIdSupplier = $lastIdSupplier + 1;
+if ( $newIdSupplier < 10 )       { $newIdSupplierString = "SP00" . (string) $newIdSupplier;} 
+elseif ( $newIdSupplier < 100 ) { $newIdSupplierString = "SP0" . (string) $newIdSupplier; }
+else { $newIdSupplierString = "SP" . (string) $newIdSupplier; }
+
+
+mysqli_free_result($result);
+
 // ambil data dari tabel tbsupplier
 $query = "SELECT * FROM tbsupplier";
 $result = mysqli_query($connection, $query);
@@ -125,6 +155,8 @@ mysqli_close($connection);
                 <li><a href="data-pelanggan.php"><button>Data Pelanggan</button></a></li>
                 <li><a href="data-supplier.php"><button class="active">Data Supplier</button></a></li>
                 <li><a href="data-kategori.php"><button>Kategori</button></a></li>
+                <li><a href="data-ongkir.php"><button>Data Ongkir</button></a></li>
+                <li><a href="data-keranjang.php"><button>Keranjang</button></a></li>
                 <li><a href="data-laporan.php"><button>Laporan</button></a></li>
                 <li><a href="../login.php"><button class="btn-logout">Logout</button></a></li>
             </ul>
@@ -174,7 +206,8 @@ mysqli_close($connection);
                     <div class="part-input">
                         <div class="left">
                             <label for="fid-supplier">Id Supplier</label>
-                            <input type="text" name="fid-supplier" id="fid-supplier" oninput="inputData()" placeholder="id supplier" required>
+                            <input type="hidden" id="fid-hidden" value="<?=$newIdSupplierString;?>">
+                            <input type="text" name="fid-supplier" id="fid-supplier" value="<?=$newIdSupplierString;?>">
                             <label for="fnama-supplier">Supplier</label>
                             <input type="text" name="fnama-supplier" id="fnama-supplier" oninput="inputData()" placeholder="nama supplier" required>
                         </div>
@@ -200,6 +233,8 @@ mysqli_close($connection);
     </section>
 
 <script>
+    const inputIdHidden = document.querySelector("#fid-hidden");
+
     const inputId = document.querySelector("#fid-supplier");
     const inputNama = document.querySelector("#fnama-supplier");
     const inputTelp = document.querySelector("#ftelp-supplier");
@@ -210,6 +245,10 @@ mysqli_close($connection);
     const btnBatal = document.querySelector("#btnbatal");
     const btnHapus = document.querySelector("#btnhapus");
     const btnUbah = document.querySelector("#btnubah");
+
+    const lastId = inputIdHidden.value;
+
+    inputId.readOnly = true;
 
     btnSimpan.disabled = true;
     btnSimpan.classList.add("disabled");
@@ -262,16 +301,16 @@ mysqli_close($connection);
     }
 
     function batal() {
+        inputId.value = lastId;
+
         inputNama.readOnly = false;
         inputNama.value = "";
-        inputId.readOnly = false;
-        inputId.value = "";
-        inputTelp.readOnly = false;
+        inputTelp.readOnly = false;        
         inputTelp.value = "";
         inputAlamat.readOnly = false;
         inputAlamat.value = "";
 
-        inputId.focus();
+        inputNama.focus();
 
         btnUbah.disabled = true;
         btnUbah.classList.add("disabled");

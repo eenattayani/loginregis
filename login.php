@@ -33,9 +33,12 @@ if ( isset($_POST["login"]) )
 
     while ($rowAdm = mysqli_fetch_assoc($resultAdm)) {
         if ( $email === $rowAdm["username"] && $pass === $rowAdm["password"] ) {
+            session_start();
             $_SESSION["login"] = true;
             $_SESSION["user"] = $rowAdm["nama_user"];
+            $_SESSION["admin"] = true;
             header("location:admin-page/dashboard.php");
+            exit;
         }
     }
 
@@ -63,15 +66,19 @@ if ( isset($_POST["login"]) )
             location.replace("'. $tujuan .'");
             </script>
             '; 
+
+            exit;
         }
     }              
     
     echo '
-    <script>
-    alert("Login Gagal!");    
-    location.replace("login.php?ke=' . $tujuan . '");
-    </script>
-';    
+        <script>
+        alert("Login Gagal!");    
+        location.replace("login.php?ke=' . $tujuan . '");
+        </script>
+    ';    
+
+    exit;
     
 }
 
