@@ -202,7 +202,7 @@ mysqli_close($connection);
                     <li><i class='bx bx-shopping-bag'></i><a href="myorders.php">My orders</a></li>
                     <li class="active"><i class='bx bx-heart' ></i><a href="wishlist.php">Wishlist</a></li>
                     <li><i class='bx bx-user' ></i><a href="#">My info</a></li>
-                    <li><i class='bx bx-log-in-circle'></i><a href="#">Sign out</a></li>
+                    <li><i class='bx bx-log-in-circle'></i><a href="login.php">Sign out</a></li>
                 </ul>
             </div>
 

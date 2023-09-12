@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #eee;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  /* font-family: "Poppins", sans-serif; */
+  color: black;
+  text-align: center;
+}
+
+header {
+  height: 120px;
+}
+
+header div {
+  float: left;
+}
+
+header div.kop-logo {
+  width: 150px;
+  height: 40px;
+  margin-left: 50px;
+}
+
+header div.kop-logo img {
+  width: 100px;
+  height: 200px;
+}
+
+header div.kop-text {
+  width: 300px;
+  /* background: orange; */
+}
+
+header div.kop-text h1 {
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+
+header div.kop-text p {
+  margin: 0;
+  padding: 0;
+}
+
+section .main .tabel-data .ket {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+section .main .tabel-data .ttd {
+  text-align: left;
+  margin-top: 20px;
+  margin-left: 60px;
+}
+
+table {
+  width: 100%;
+}
+
+table,
+th,
+td {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+tr {
+  line-height: 22px;
+}
+
+tr.total-harga {
+  line-height: 26px;
+}
+
+th {
+  background: #999;
+  line-height: 26px;
+}
+
+tr:nth-child(even) {
+  background-color: #b9bdbd;
+}

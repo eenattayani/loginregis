@@ -129,7 +129,7 @@ if (isset($_SESSION["login"])) {
                         <span>Rp <?=$produk['harga_jual'];?></span>
                     </div>
                     <div class="like-icon">
-                        <i class='bx bx-heart' ></i>
+                        <a href="detail-product.php?id=<?=$produk['id_barang'];?>"><i class='bx bx-heart' ></i></a>
                     </div>
                 </div>        
 

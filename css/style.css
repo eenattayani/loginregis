@@ -379,7 +379,7 @@ section .main-content .main-content-products {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  column-gap: 50px;
+  column-gap: 45px;
   padding-right: 20px;
   flex-wrap: wrap;
 }
@@ -484,6 +484,20 @@ section.banner {
   background: #eee5e5;
   position: relative;
   font-family: "Roboto Slab", serif;
+}
+
+.banner .sliders {
+  position: relative;
+}
+
+.banner .sliders .slide {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  position: absolute;
+}
+
+.banner .sliders .slide.active-slide {
+  opacity: 1;
 }
 
 .banner .img-slide {
@@ -816,6 +830,7 @@ section.content-detail-product {
 
 .content-detail-product .product-img img {
   height: 100%;
+  max-width: 50vw;
 }
 
 .content-detail-product .product-desc {

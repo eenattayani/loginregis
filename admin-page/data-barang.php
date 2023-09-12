@@ -15,6 +15,7 @@ if (isset($_POST["btn"])) {
     $nama = $_POST["fnama-barang"];
     $harga_beli = $_POST["fharga-beli"];
     $harga_jual = $_POST["fharga-jual"];
+    $deskripsi = $_POST["fdeskripsi"];
 
     // cek apakah nama_barang sudah tersedia sebelumnya
     $query = "SELECT * FROM tbbarang";
@@ -57,7 +58,7 @@ if (isset($_POST["btn"])) {
             $pesanError = "File gagal diupload";
         }
         
-        $queryTambah = "INSERT INTO tbbarang (id_barang, id_kategori, nama_barang, harga_beli, harga_jual) VALUES ('$id','$kategori','$nama','$harga_beli','$harga_jual')";
+        $queryTambah = "INSERT INTO tbbarang (id_barang, id_kategori, nama_barang, harga_beli, harga_jual, deskripsi) VALUES ('$id','$kategori','$nama','$harga_beli','$harga_jual','$deskripsi')";
         $resultTambah = mysqli_query($connection, $queryTambah);
 
         if ($resultTambah) {
@@ -95,7 +96,7 @@ if (isset($_POST["btn"])) {
             }
         // }
 
-        $queryUbah = "UPDATE tbbarang SET id_kategori = '$kategori', nama_barang = '$nama', harga_beli = '$harga_beli', harga_jual = '$harga_jual' WHERE id_barang = '$id'";
+        $queryUbah = "UPDATE tbbarang SET id_kategori = '$kategori', nama_barang = '$nama', harga_beli = '$harga_beli', harga_jual = '$harga_jual', deskripsi = '$deskripsi' WHERE id_barang = '$id'";
         $resultUbah = mysqli_query($connection, $queryUbah);        
 
         if ($resultUbah) {
@@ -239,6 +240,7 @@ mysqli_close($connection);
                             <th>Id Barang</th>
                             <th>Id Kategori</th>
                             <th>Nama Barang</th>
+                            <th>Deskripsi Produk</th>
                             <th>Harga Beli</th>
                             <th>Harga Jual</th>
                             <th>Stok</th>
@@ -260,6 +262,7 @@ mysqli_close($connection);
                                     <td id=\"id$r\">" . $row["id_barang"] . "</td>
                                     <td id=\"kategori$r\">" . $row["id_kategori"] . "</td>                                
                                     <td id=\"nama$r\">" . $row["nama_barang"] . "</td>                               
+                                    <td id=\"deskripsi$r\">" . $row["deskripsi"] . "</td>                               
                                     <td id=\"hargabeli$r\">" . $row["harga_beli"] . "</td>                               
                                     <td id=\"hargajual$r\">" . $row["harga_jual"] . "</td>                               
                                     <td id=\"stok$r\">" . $row["stok"] . "</td>                               
@@ -302,6 +305,8 @@ mysqli_close($connection);
                             </select>
                             <label for="fnama-barang">Nama Barang</label>
                             <input type="text" name="fnama-barang" id="fnama-barang" oninput="inputData()" placeholder="nama barang" required>
+                            <label for="fdeskripsi">Deskripsi Produk</label>
+                            <textarea name="fdeskripsi" id="fdeskripsi" cols="10" rows="5"></textarea>
                             
                         </div>
                         <div class="right">
@@ -337,6 +342,7 @@ mysqli_close($connection);
     const inputGambar = document.querySelector("#fgambar-barang");
     const inputHargaBeli = document.querySelector("#fharga-beli");
     const inputHargaJual = document.querySelector("#fharga-jual");
+    const inputDeskripsi = document.querySelector("#fdeskripsi");
     const gambar = document.querySelector("#img");
 
     const btnTambah = document.querySelector("#btntambah");
@@ -369,6 +375,8 @@ mysqli_close($connection);
         const kolNama = document.querySelector("#nama" + row).innerHTML;
         const kolHargaBeli = document.querySelector("#hargabeli" + row).innerHTML;
         const kolHargaJual = document.querySelector("#hargajual" + row).innerHTML;
+        const kolDeskripsi = document.querySelector("#deskripsi" + row).innerHTML;
+
 
         gambar.removeAttribute("hidden");
         gambar.src = "produk_upload/" + kolId + ".png";
@@ -378,6 +386,7 @@ mysqli_close($connection);
         inputNama.value = kolNama;        
         inputHargaBeli.value = kolHargaBeli;        
         inputHargaJual.value = kolHargaJual; 
+        inputDeskripsi.value = kolDeskripsi;
 
         inputId.readOnly = true;
         inputKategori.readOnly = true;
@@ -385,6 +394,7 @@ mysqli_close($connection);
         inputHargaBeli.readOnly = true;
         inputHargaJual.readOnly = true;
         inputGambar.readOnly = true;
+        inputDeskripsi.readOnly = true;
 
         btnUbah.disabled = false;
         btnUbah.classList.remove("disabled");
@@ -404,6 +414,7 @@ mysqli_close($connection);
         inputHargaBeli.readOnly = false;
         inputHargaJual.readOnly = false;
         inputGambar.readOnly = false;
+        inputDeskripsi.readOnly = false;
 
         inputNama.focus();
 

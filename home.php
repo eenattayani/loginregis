@@ -15,6 +15,29 @@ if (isset($_SESSION["login"])) {
         $link_cart = "myorders.php";
     }
 }
+
+/* 
+    menampilkan produk paling laris:
+    - ambil semua "id_barang" dan "jlh_barang" pada tabel keranjang
+    - jumlahkan "jlh_barang" yang memiliki "id_barang" sama
+    - tampilkan 4 data dengan urutan dari "jlh_barang" terbesar
+ */
+
+$query = "SELECT tbkeranjang.id_barang, tbbarang.nama_barang, SUM(tbkeranjang.jlh_barang) AS total_jumlah 
+            FROM tbkeranjang 
+            JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang
+            GROUP BY tbkeranjang.id_barang, tbbarang.nama_barang
+            ORDER BY total_jumlah DESC LIMIT 4";
+$result = mysqli_query($connection, $query);
+
+
+
+
+mysqli_close($connection);
+
+
+
+
     
 ?>
 
@@ -65,20 +88,58 @@ if (isset($_SESSION["login"])) {
     </header>
 
     <section class="banner">
-        <img class="img-slide" src="img/home/banner-img-1.jpg" alt="">
-        <div class="banner-text">
-            <h3 class="headline">Kecantikan</h3>
-            <h1 class="tag">Special</h1>
-            <h1 class="tag">Price</h1>
-            <a href="kategori.php"><button class="banner-btn">Shop Now</button></a>
-        </div>
-        <div class="banner-arrow">
-            <i class='bx bx-chevron-left' ></i>
-            <i class='bx bx-chevron-right' ></i>
-        </div>
-        <div class="slider">
-            <div class="left active"></div>
-            <div class="right"></div>
+        <div class="sliders">
+            <div class="slide active-slide">
+                <img class="img-slide" src="img/home/banner-img-3.jpg" alt="">
+                <div class="banner-text">
+                    <h3 class="headline">Kecantikan</h3>
+                    <h1 class="tag">Special</h1>
+                    <h1 class="tag">Price</h1>
+                    <a href="kategori.php"><button class="banner-btn">Shop Now</button></a>
+                </div>
+                <div class="banner-arrow">
+                    <i class='bx bx-chevron-left' ></i>
+                    <i class='bx bx-chevron-right' ></i>
+                </div>
+                <div class="slider">
+                    <div class="left active"></div>
+                    <div class="right"></div>
+                </div>
+            </div>
+            <div class="slide">
+                <img class="img-slide" src="img/home/banner-img-2.jpg" alt="">
+                <div class="banner-text">
+                    <h3 class="headline">Kecantikan</h3>
+                    <h1 class="tag">Special</h1>
+                    <h1 class="tag">Price</h1>
+                    <a href="kategori.php"><button class="banner-btn">Shop Now</button></a>
+                </div>
+                <div class="banner-arrow">
+                    <i class='bx bx-chevron-left' ></i>
+                    <i class='bx bx-chevron-right' ></i>
+                </div>
+                <div class="slider">
+                    <div class="left active"></div>
+                    <div class="right"></div>
+                </div>
+            </div>
+            <div class="slide">
+                <img class="img-slide" src="img/home/banner-img-1.jpg" alt="">
+                <div class="banner-text">
+                    <h3 class="headline">Kecantikan</h3>
+                    <h1 class="tag">Special</h1>
+                    <h1 class="tag">Price</h1>
+                    <a href="kategori.php"><button class="banner-btn">Shop Now</button></a>
+                </div>
+                <div class="banner-arrow">
+                    <span id="slide-left"><i class='bx bx-chevron-left' ></i></span>
+                    <span id="slide-right"><i class='bx bx-chevron-right' ></i></span>
+                </div>
+                <div class="slider">
+                    <div class="left active"></div>
+                    <div class="right"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -114,41 +175,25 @@ if (isset($_SESSION["login"])) {
                 <i class='bx bx-left-arrow-alt'></i>
             </div>
 
-            <div class="laris-box box-1">
-                <div class="laris-img">
-                    <img src="img/home/truk.png" alt="">
+            <?php
+                $no_urut = 1;
+                while ($produk = mysqli_fetch_assoc($result)) {
+            ?>                
+                <div class="laris-box box-<?=$no_urut;?>">
+                    <div class="laris-img">
+                        <a href="detail-product.php?id=<?=$produk["id_barang"];?>"><img src="admin-page/produk_upload/<?=$produk["id_barang"];?>.png" alt=""></a>
+                    </div>
+                    <div class="laris-desc">
+                        <p><?=$produk["nama_barang"];?></p>
+                        <span>terjual: <?=$produk["total_jumlah"];?></span>
+                    </div>
                 </div>
-                <div class="laris-desc">
-                    <p>The Little Truk</p>
-                </div>
-            </div>
+            <?php
+                    $no_urut++;
+                }
+            ?>
 
-            <div class="laris-box box-2">
-                <div class="laris-img">
-                    <img src="img/home/push-pop.png" alt="">
-                </div>
-                <div class="laris-desc">
-                    <p>Push pop - Love</p>
-                </div>
-            </div>
-
-            <div class="laris-box box-3">
-                <div class="laris-img">
-                    <img src="img/home/garnier.png" alt="">
-                </div>
-                <div class="laris-desc">
-                    <p>Garnier Men TurboLight</p>
-                </div>
-            </div>
-
-            <div class="laris-box box-4">
-                <div class="laris-img">
-                    <img src="img/home/kotak-pensil.png" alt="">
-                </div>
-                <div class="laris-desc">
-                    <p>Kotak Pensil</p>
-                </div>
-            </div>
+                        
 
             <div class="arrows">
                 <i class='bx bx-right-arrow-alt'></i>
@@ -157,7 +202,39 @@ if (isset($_SESSION["login"])) {
     </section>
 
     <footer>
-        <p>Copyright &copy 2023</p>
+        <p>Copyright &copy 2023</p>        
     </footer>
+
+    <script>
+        const sliders = document.querySelectorAll('.slide');
+        const slideLeft = document.querySelector("#slide-left");
+        const slideRight = document.querySelector("#slide-right");
+
+        slideLeft.addEventListener("click", () => {
+            nextSlide();
+        });
+
+        slideRight.addEventListener("click", () => {
+            nextSlide();            
+        });
+
+        let currentSlide = 0;
+
+        function showSlide(slideIndex) {
+            sliders.forEach((slide) => {
+                slide.classList.remove('active-slide');
+            });
+            sliders[slideIndex].classList.add('active-slide');
+        }
+
+        function nextSlide() {
+            currentSlide = ( currentSlide + 1 ) % sliders.length;
+            showSlide(currentSlide);
+        }
+
+
+        setInterval(nextSlide, 3000);
+
+    </script>
 </body>
 </html>

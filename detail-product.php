@@ -17,6 +17,7 @@ if(isset($_GET["id"])){
     $idBarang = $data["id_barang"];
     $namaBarang = $data["nama_barang"];
     $hargaBarang = $data["harga_jual"];
+    $deskripsi = $data["deskripsi"];
 
     
     if (!$result) {
@@ -108,7 +109,15 @@ if (isset($_SESSION["login"])) {
             </div>
             <div class="product-description">
                 <h4>Deskripsi Produk</h4>
-                <p>Produk ini memiliki sangat banyak kegunaan dalam kehidupan sehari-hari manusia untuk menunjang berbagai aktivitas yang beragam di masyarakat. </p>
+                <p>
+                <?php
+                    if ( $deskripsi !== "" ) {
+                        echo "$deskripsi";
+                    } else {
+                        echo "Produk ini memiliki sangat banyak kegunaan dalam kehidupan sehari-hari manusia untuk menunjang berbagai aktivitas yang beragam di masyarakat.";
+                    }
+                ?>    
+                </p>
             </div>
             <div class="product-action">
                 <form action="wishlist.php" method="post">

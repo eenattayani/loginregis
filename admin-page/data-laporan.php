@@ -4,6 +4,73 @@ date_default_timezone_set("Asia/Jakarta");
 include "adm-config.php";
 include "../dbconn.php";
 
+if ( isset($_POST["cetak"]) ) {
+    $isiLaporan = $_POST["isi-tabel-laporan"];
+
+    $ketWaktu = $_POST["cetak"];
+
+    $title = "nota-penjualan.pdf";
+
+    $isiNota = '
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="img/logo-hb.png" type="image/x-icon">
+        <title>HB Admin - Data Laporan</title>
+
+        <link rel="stylesheet" href="../css/style-nota.css">
+        
+    </head>
+    <body class="cetak-nota">
+        <header class="kop">
+            <div class="kop-logo">        
+                    <img src="img/logo-hb.png" alt="HB">            
+            </div>  
+            <div class="kop-text">
+                <h1>Laporan Penjualan</h1>
+                <p>Jl. Dwikora no. 19 Blok B, Pulau Tayan Utara<br>Hp. 082251072261</p>
+            </div>      
+        </header>
+
+        <section class="content">        
+            <div class="main data">
+                <div class="tabel-data penjualan">                
+                    <div class="ket">                
+                        <span class="tanggal">';
+                        $isiNota .= $ketWaktu;
+            $isiNota .= '</span>
+                    </div>
+
+                    <table>';
+        $isiNota .= $isiLaporan;
+        $isiNota .= '
+                     
+                    </table>
+
+                    <div class="ttd">
+                        <p class="admin">Admin</p>
+                        <br><br><br>
+                        <p>Verdy</p>                    
+                    </div>
+                </div>            
+            </div>
+        </section>
+    </body>
+    </html>
+    ';
+
+    require_once "../vendor/autoload.php";
+    $mpdf = new \Mpdf\Mpdf();
+    $mpdf->AddPage("P","","","","","15","15","15","15","","","","","","","","","","","","A4");
+    $mpdf->WriteHTML($isiNota);
+    $mpdf->Output($title, 'I');
+    
+} else {
+
 $arrBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 $arrHari = ["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
 
@@ -14,7 +81,7 @@ $tahun = date("Y");
 
 
 // $query = "SELECT * FROM tbkeranjang WHERE status_beli='selesai' ORDER BY id_penjualan DESC";
-$query = "SELECT tbkeranjang.id_penjualan, tbkeranjang.id_pelanggan, tbkeranjang.id_barang, tbbarang.nama_barang, tbkeranjang.jlh_barang, tbkeranjang.harga_satuan FROM tbkeranjang INNER JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang WHERE tbkeranjang.status_beli='selesai'" ;
+$query = "SELECT tbpenjualan.tanggal, tbkeranjang.id_penjualan, tbkeranjang.id_pelanggan, tbkeranjang.id_barang, tbbarang.nama_barang, tbkeranjang.jlh_barang, tbkeranjang.harga_satuan FROM tbkeranjang INNER JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang INNER JOIN tbpenjualan ON tbkeranjang.id_penjualan = tbpenjualan.id_penjualan WHERE tbkeranjang.status_beli='selesai'" ;
 $result = mysqli_query($connection, $query);
 
 if (!$result) {
@@ -28,30 +95,87 @@ $arrayResult[] = $result;
 $tanggalPilih = "$tanggal $bulan $tahun";
 $pertanggal = $tanggalPilih;
 
-if (isset($_POST["btn"])) {
-    $pertanggal = $_POST["fpertanggal"];   
-    
-    $tanggalPilih = $pertanggal;
-    $partTanggalPilih = explode("-" , $tanggalPilih);
-    $tanggal = $partTanggalPilih[2];
-    $bulan = $arrBulan[(int)$partTanggalPilih[1]-1];
-    $tahun = $partTanggalPilih[0];
+$showDate = true;
 
+$ketWaktu = "tanggal/bulan/tahun";
 
+if (isset($_POST["cari"])) {
+    if ($_POST["cari"] === "daily") {
+        $showDate = false;
 
+        $pertanggal = $_POST["fpertanggal"];   
+        
+        $tanggalPilih = $pertanggal;
+        $partTanggalPilih = explode("-" , $tanggalPilih);
+        $tanggal = $partTanggalPilih[2];
+        $bulan = $arrBulan[(int)$partTanggalPilih[1]-1];
+        $tahun = $partTanggalPilih[0];
 
-    $resultPertanggal = mysqli_query($connection, "SELECT * FROM tbpenjualan WHERE tanggal='$pertanggal'");
-    
-    if ($resultPertanggal->num_rows === 0) {
-        $arrayResult = array();        
-    } else {
-        $arrayResult = array();
+        $ketWaktu = "Tanggal: $tanggal $bulan $tahun";
 
-        while($rowPertanggal = mysqli_fetch_assoc($resultPertanggal)){            
-            $result = mysqli_query($connection, "SELECT tbkeranjang.id_penjualan, tbkeranjang.id_pelanggan, tbkeranjang.id_barang, tbbarang.nama_barang, tbkeranjang.jlh_barang, tbkeranjang.harga_satuan FROM tbkeranjang INNER JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang WHERE tbkeranjang.id_penjualan='$rowPertanggal[id_penjualan]'");
-            
-            $arrayResult[] = $result;
+        $resultPertanggal = mysqli_query($connection, "SELECT * FROM tbpenjualan WHERE tanggal='$pertanggal'");
+        
+        if ($resultPertanggal->num_rows === 0) {
+            $arrayResult = array();        
+        } else {
+            $arrayResult = array();
+
+            while($rowPertanggal = mysqli_fetch_assoc($resultPertanggal)){            
+                $result = mysqli_query($connection, "SELECT tbkeranjang.id_penjualan, tbkeranjang.id_pelanggan, tbkeranjang.id_barang, tbbarang.nama_barang, tbkeranjang.jlh_barang, tbkeranjang.harga_satuan FROM tbkeranjang INNER JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang WHERE tbkeranjang.id_penjualan='$rowPertanggal[id_penjualan]'");
+                
+                $arrayResult[] = $result;
+            }
         }
+    } elseif ($_POST["cari"] === "monthly") {
+        $showDate = true;
+
+        $perbulan = $_POST["fperbulan"];
+        $perbulanTahun = $_POST["fperbulan-tahun"];
+
+        $tanggal = "Bulan: ";
+        $bulan = $arrBulan[(int)$perbulan-1];
+        $tahun = $perbulanTahun;
+
+        $ketWaktu = "Bulan: $bulan $tahun";
+
+        $resultPerbulan = mysqli_query($connection, "SELECT * FROM tbpenjualan WHERE DATE_FORMAT(tanggal, '%m') ='$perbulan' AND YEAR(tanggal) = '$perbulanTahun'");
+
+        if ($resultPerbulan->num_rows === 0) {
+            $arrayResult = array();        
+        } else {
+            $arrayResult = array();
+
+            while($rowPerbulan = mysqli_fetch_assoc($resultPerbulan)){            
+                $result = mysqli_query($connection, "SELECT tbpenjualan.tanggal, tbkeranjang.id_penjualan, tbkeranjang.id_pelanggan, tbkeranjang.id_barang, tbbarang.nama_barang, tbkeranjang.jlh_barang, tbkeranjang.harga_satuan FROM tbkeranjang INNER JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang INNER JOIN tbpenjualan ON tbkeranjang.id_penjualan = tbpenjualan.id_penjualan WHERE tbkeranjang.id_penjualan='$rowPerbulan[id_penjualan]'");
+                
+                $arrayResult[] = $result;
+            }
+        }
+    } elseif ($_POST["cari"] === "yearly") {
+        $showDate = true;
+        
+        $pertahun = $_POST["fpertahun"];   
+          
+        $tanggal = "Tahun: ";
+        $bulan = "";
+        $tahun = $pertahun;
+
+        $ketWaktu = "Tahun: $pertahun";   
+
+        $resultPertahun = mysqli_query($connection, "SELECT * FROM tbpenjualan WHERE YEAR(tanggal) = '$pertahun'");
+
+        if ($resultPertahun->num_rows === 0) {
+            $arrayResult = array();        
+        } else {
+            $arrayResult = array();
+
+            while($rowPertahun = mysqli_fetch_assoc($resultPertahun)){            
+                $result = mysqli_query($connection, "SELECT tbpenjualan.tanggal, tbkeranjang.id_penjualan, tbkeranjang.id_pelanggan, tbkeranjang.id_barang, tbbarang.nama_barang, tbkeranjang.jlh_barang, tbkeranjang.harga_satuan FROM tbkeranjang INNER JOIN tbbarang ON tbkeranjang.id_barang = tbbarang.id_barang INNER JOIN tbpenjualan ON tbkeranjang.id_penjualan = tbpenjualan.id_penjualan WHERE tbkeranjang.id_penjualan='$rowPertahun[id_penjualan]'");
+                
+                $arrayResult[] = $result;
+            }
+        }
+    
     }
 }
 
@@ -118,9 +242,14 @@ mysqli_close($connection);
                     <span class="admin">Admin : Verdy</span>
                     <span class="tanggal"><?php echo "$tanggal $bulan $tahun";?></span>
                 </div>
-                <table>
+                <table id="tabel-laporan">
                     <thead>
                         <tr>                            
+                        <?php 
+                        if ( $showDate ) {                                                         
+                            echo" <th>Tanggal</th> ";
+                        } 
+                        ?>
                             <th>Id Penjualan</th>
                             <th>Id Pelanggan</th>                         
                             <th>Id Barang</th>                                                                                         
@@ -134,7 +263,7 @@ mysqli_close($connection);
                     if ( empty($arrayResult) ) {
                     ?>
                         <tr>
-                            <td colspan="7"> == Belum ada data penjualan == </td>
+                            <td colspan="6"> == Belum ada data penjualan == </td>
                         </tr>
                     <?php
                     } else {
@@ -142,17 +271,32 @@ mysqli_close($connection);
                             $r = 1;
                             while($row = mysqli_fetch_assoc($result)) {                                                       
                                 echo "
-                                <tr id=\"baris$r\" onclick=\"pilihBaris(". $r .")\">
-                                    <td id=\"id$r\">" . $row["id_penjualan"] . "</td>                             
+                                <tr id=\"baris$r\" onclick=\"pilihBaris(". $r .")\"> ";
+                            if ($showDate) {
+                              echo "<td id=\"tgl$r\">" . $row["tanggal"] . "</td>  ";                            
+                            }
+                            echo "  <td id=\"id$r\">" . $row["id_penjualan"] . "</td>                             
                                     <td id=\"pelanggan$r\">" . $row["id_pelanggan"] . "</td>                                                                                            
                                     <td id=\"idbarang$r\">" . $row["id_barang"] . "</td>                               
                                     <td id=\"namabarang$r\">" . $row["nama_barang"] . "</td>                               
-                                    <td id=\"qty$r\">" . $row["jlh_barang"] . "</td>                               
-                                    <td id=\"harga$r\">" . $row["harga_satuan"] . "</td>                               
+                                    <td class=\"qty\" id=\"qty$r\">" . $row["jlh_barang"] . "</td>                               
+                                    <td class=\"harga-satuan\">" . $row["harga_satuan"] . "</td>                               
                                 </tr>
                                 ";
                                 $r++;
+                            }                        
+                        }
+                        if (isset($_POST["cari"])) {
+                            $colspan = 5;
+                            if ( $_POST["cari"] !== "daily" ) {
+                                $colspan = 6;
                             }
+                            echo "
+                            <tr class=\"total\">
+                                <td colspan=\"$colspan\">Total</td>
+                                <td id=\"total\">5000.000</td>
+                            </tr>
+                             ";                            
                         }
                     }
                     ?>
@@ -185,7 +329,7 @@ mysqli_close($connection);
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
                                 <option value="2022">2022</option>
-                                <option value="2023">2023</option>
+                                <option value="2023" selected>2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
                                 <option value="2026">2026</option>
@@ -199,7 +343,7 @@ mysqli_close($connection);
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
                                 <option value="2022">2022</option>
-                                <option value="2023">2023</option>
+                                <option value="2023" selected>2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
                                 <option value="2026">2026</option>
@@ -214,10 +358,14 @@ mysqli_close($connection);
                     </div>              
                     <div class="part-action">
                         <!-- <button type="submit" name="btn" value="pertanggal">Tanggal</button> -->
+                        <input type="hidden" id="isi-tabel-laporan" name="isi-tabel-laporan" value="isi laporan">
                         <button type="button" id="harian">Harian</button>
                         <button type="button" id="bulanan">Bulanan</button>
                         <button type="button" id="tahunan">Tahunan</button>                        
-                        <button class="keluar">Cetak</button>
+                        <button type="submit" id="btn-cetak" name="cetak" value="<?=$ketWaktu;?>" class="keluar">Cetak</button>
+                        <button type="submit" id="btn-cari-day" name="cari" value="daily" class="cari"><i class='bx bx-search-alt'></i> Cari</button>
+                        <button type="submit" id="btn-cari-month" name="cari" value="monthly" class="cari"><i class='bx bx-search-alt'></i> Cari</button>
+                        <button type="submit" id="btn-cari-year" name="cari" value="yearly" class="cari"><i class='bx bx-search-alt'></i> Cari</button>
                     </div>
                 </form>
             </div>
@@ -228,10 +376,55 @@ mysqli_close($connection);
     const btnHarian = document.querySelector("#harian");
     const btnBulanan = document.querySelector("#bulanan");
     const btnTahunan = document.querySelector("#tahunan");
+    
+    const btnCetak = document.querySelector("#btn-cetak");
 
     const inputHarian = document.querySelectorAll(".input-harian");
     const inputBulanan = document.querySelectorAll(".input-bulanan");
     const inputTahunan = document.querySelectorAll(".input-tahunan");
+
+    const btnDaily = document.querySelector("#btn-cari-day");
+    const btnMonthly = document.querySelector("#btn-cari-month");
+    const btnYearly = document.querySelector("#btn-cari-year");
+
+    const colTotal = document.querySelector("#total");
+
+    const qty = document.querySelectorAll(".qty");
+    const hargaSatuan = document.querySelectorAll(".harga-satuan");
+
+    const tabelLaporan = document.querySelector("#tabel-laporan");
+    const isiTabelLaporan = document.querySelector("#isi-tabel-laporan");
+        
+
+    let hargaTotal = 0;    
+    for (let i = 0; i < hargaSatuan.length; i++) {
+        let value = Number(hargaSatuan[i].textContent) * Number(qty[i].textContent);
+        if (!isNaN(value)) {
+            hargaTotal += value;
+        }
+    }
+    
+
+    if (colTotal) {        
+        colTotal.innerHTML = hargaTotal;
+        console.info(colTotal.innerHTML);
+    }
+
+    isiTabelLaporan.value = tabelLaporan.innerHTML;
+    console.info(isiTabelLaporan.value);
+
+    // btnCetak.disabled = true;
+    // btnCetak.classList.add("disabled");
+
+    btnDaily.disabled = true;
+    btnDaily.classList.add("disabled");
+    btnMonthly.hidden = true;    
+    btnYearly.hidden = true;    
+
+    inputHarian[1].addEventListener('change', ()=>{
+      btnDaily.disabled = false;
+      btnDaily.classList.remove("disabled");
+    });
 
     btnHarian.addEventListener('click', () => {        
         inputHarian[0].hidden = false;
@@ -241,6 +434,10 @@ mysqli_close($connection);
         inputBulanan[2].hidden = true;
         inputTahunan[0].hidden = true;
         inputTahunan[1].hidden = true;
+
+        btnDaily.hidden = false;
+        btnMonthly.hidden = true;        
+        btnYearly.hidden = true;
     });
 
     btnBulanan.addEventListener('click', () => {        
@@ -251,6 +448,10 @@ mysqli_close($connection);
         inputHarian[1].hidden = true;
         inputTahunan[0].hidden = true;
         inputTahunan[1].hidden = true;
+
+        btnDaily.hidden = true;
+        btnMonthly.hidden = false;        
+        btnYearly.hidden = true;
     });
 
     btnTahunan.addEventListener('click', () => {
@@ -262,8 +463,19 @@ mysqli_close($connection);
         inputBulanan[1].hidden = true;
         inputBulanan[2].hidden = true;
         
+        btnDaily.hidden = true;
+        btnMonthly.hidden = true;        
+        btnYearly.hidden = false;
 
     });
+
+    function pilihBaris(row){
+        console.info("baris: ", row);
+    }
 </script>
 </body>
 </html>
+
+<?php 
+}
+?>

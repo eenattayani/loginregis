@@ -86,9 +86,12 @@ if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
         $total = $_POST["total"];  
     
         //alamat tujuan kirim
-        $alamat = $_POST["tujuan-kirim"];
-        $wilayah = $_POST["hid-wilayah"];
-        $kodepos= $_POST["kode-pos"];
+        $alamat = $_POST["provinsi"];
+        $wilayah = $_POST["distrik"];
+        $kodepos= $_POST["kodepos"];
+
+        //ekspedisi
+        $ekspedisi = $_POST["ekspedisi"] . " - " . $_POST["paket"];        
     
         $alamatKirim = $alamat . ", " . $wilayah . ", " . $kodepos;
     
@@ -113,7 +116,7 @@ if( isset($_POST["terima"]) ){ // konfirmasi barang diterima
         }
     
         // insert ke tabel penjualan
-        $queryPenjualan = "INSERT INTO tbpenjualan(id_penjualan,id_pelanggan,tanggal,harga_subtotal,harga_ongkir,harga_total,status_penjualan) VALUES ('$idPenjualan','$idPelanggan','$tanggal','$subtotal','$ongkir','$total','tunggu bayar')";
+        $queryPenjualan = "INSERT INTO tbpenjualan(id_penjualan,id_pelanggan,tanggal,harga_subtotal,harga_ongkir,harga_total,status_penjualan,ekspedisi) VALUES ('$idPenjualan','$idPelanggan','$tanggal','$subtotal','$ongkir','$total','tunggu bayar','$ekspedisi')";
         $resultPenjualan = mysqli_query($connection,$queryPenjualan);            
 
         // update tbkeranjang

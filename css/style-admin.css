@@ -345,6 +345,7 @@ th:hover {
 }
 
 .content .main.data .form-input .part-input input,
+.content .main.data .form-input .part-input textarea,
 .content .main.data .form-input .part-input select {
   background: #eee;
   margin-top: 5px;
@@ -414,6 +415,10 @@ th:hover {
   font-weight: 400;
 }
 
+.content .main.data .tabel-data.penjualan {
+  max-height: 50vh;
+}
+
 .content .main.data .tabel-data .ket .tanggal {
   background: var(--th-bg-color);
   display: flex;
@@ -422,6 +427,12 @@ th:hover {
   justify-content: center;
   align-items: center;
   border-radius: 7px;
+}
+
+.content .main.data .tabel-data tr.total {
+  background: var(--second-bg-color);
+  line-height: 26px;
+  font-weight: 600;
 }
 
 .content .main.data .form-input.persediaan,
@@ -450,6 +461,12 @@ th:hover {
   width: 150px;
 }
 
+.content .main.data .form-input.penjualan .part-action button.cari {
+  width: 100px;
+  margin-left: 50px;
+  font-weight: 600;
+}
+
 /* ============================ */
 /* Halaman admin penjualan.php  */
 /* ============================ */
@@ -457,6 +474,63 @@ th:hover {
   width: 100%;
   max-height: 340px;
   background: #18ada6;
+}
+
+/* ===================================== */
+/* Halaman Kategori admin-cetaknota.php  */
+/* ===================================== */
+body.cetak-nota {
+  width: 100%;
+  background: #18ada6;
+}
+
+.cetak-nota .kop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-color);
+  max-height: 200px;
+  padding-top: 50px;
+}
+
+.cetak-nota .kop .kop-text {
+  text-align: center;
+}
+
+.cetak-nota .content .main .tabel-data {
+  max-height: unset;
+}
+
+.cetak-nota .content .main .tabel-data table {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.cetak-nota .content .main .tabel-data table,
+.cetak-nota .content .main .tabel-data th,
+.cetak-nota .content .main .tabel-data td {
+  border: 1px solid #000;
+}
+
+.cetak-nota .content .main .tabel-data th {
+  line-height: 28px;
+}
+
+.cetak-nota .content .main .tabel-data tr {
+  line-height: 24px;
+}
+
+.cetak-nota .content .main .tabel-data tr.total-harga {
+  line-height: 28px;
+  font-weight: 700;
+}
+
+.cetak-nota .content .main .tabel-data tr:nth-child(even) {
+  background-color: #b9bdbd;
+}
+
+.cetak-nota .content .main .tabel-data .ttd {
+  margin-left: 30px;
 }
 
 /* ============================ */
