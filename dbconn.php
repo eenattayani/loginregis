@@ -1,13 +1,13 @@
 <?php
-    $servername = 'localhost'; 
-    $username = 'root'; 
-    $password = ''; 
-    $database = 'dbhokibeauty'; 
-
     // $servername = 'localhost'; 
-    // $username = 'u420165457_root'; 
-    // $password = '>:zkpzavG8'; 
-    // $database = 'u420165457_dbhokibeauty'; 
+    // $username = 'root'; 
+    // $password = ''; 
+    // $database = 'dbhokibeauty'; 
+
+    $servername = 'localhost'; 
+    $username = 'u420165457_root'; 
+    $password = '>:zkpzavG8'; 
+    $database = 'u420165457_dbhokibeauty'; 
 
     $connection = mysqli_connect($servername, $username, $password, $database);
 
